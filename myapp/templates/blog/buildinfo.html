@@ -1,0 +1,42 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center">{{build.name }}</h1><br>
+            <ul class="list-group">
+                {% if build.adres == ''  %}
+                    <li class="list-group-item "> <p>Юридический адрес не указан</p></li>
+                {% else %}
+                    <li class="list-group-item "> <p>Юридический адрес: {{build.adres }}</p></li>
+                {% endif %}
+                {% if build.logo == ''  %}
+                <p>{{build.logo}}</p>
+                    <li class="list-group-item "><img src="/images/not_img.png" alt="img_error" class="img-thumbnail"></li>
+                {% else %}
+                    <li class="list-group-item "><img src="{{ build.logo.url}}" alt="img_error" class="img-thumbnail"></li>
+                {% endif %}
+                {% if build.FIO == ''  %}
+                    <li class="list-group-item "> <p>Руководящее лицо не указано</p></li>
+                {% else %}
+                    <li class="list-group-item "> <p>Руководящее лицо: {{build.FIO }}</p></li>
+                {% endif %}
+            </ul>
+        <div>
+            <br>
+            <h3 align="center">Дополнительные сведения</h3><br><br>
+            {% if l == '' %}
+                <p>К сожалению, дополнитьной информации пока нет :(</p>
+            {% else %}
+                <p>Для более полного исследования условий, которые способна предоставить образовательная организация, можно обратиться к форме N 85-k (Сведения о деятельности организации, осуществляющей образовательную деятельность по образовательным программам дошкольного образования, присмотр и уход за детьми)</p>
+                <a href="{% url 'VR' build.id 1 %}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Изучить форму для данной организации</a><br><br>
+                <p>Однако, вы можете также спокойно скачать данный документ с данного ресурса</p>
+                <a href="{{ build.link.url }}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Скачать документ</a>
+            {% endif %}
+        </div>
+    </div>
+</article>
+
+
+{% endblock content %}

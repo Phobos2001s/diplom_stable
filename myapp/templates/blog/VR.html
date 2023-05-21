@@ -1,0 +1,949 @@
+{% extends "blog/basevr.html" %}
+{% load static %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body" style="overflow-x:auto;">
+
+        {% if flag == 1 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателя</th>
+                                <th scope="col">Код</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r1.id }}</td>
+                                <td>{{ row.r1 }}</td>
+                                <td>{{ row.value }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 2 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Режим работы</th>
+                                <th scope="col">Численность воспитанников</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r2.id }}</td>
+                                <td>{{ row.r2 }}</td>
+                                <td>{{ row.value }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif%}
+
+        {% elif flag == 3 %}
+
+           <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей</th>
+                                <th scope="col">Всего реализуемых образовательных программ</th>
+                                <th scope="col">Число образовательных программ реализуемых с использованием сетевой формы</th>
+                                <th scope="col">Общее число заключенных договоров с организациями на реализацию образовательных программ с использованием сетевой формы</th>
+                                <th scope="col">Численность воспитанников, обучающихся с применением сетевой формы</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in VR %}
+                                <tr>
+                                    <td>{{ row.r3.id }}</td>
+                                    <td>{{ row.r3 }}</td>
+                                    <td>{{ row.value1 }}</td>
+                                    <td>{{ row.value2 }}</td>
+                                    <td>{{ row.value3 }}</td>
+                                    <td>{{ row.value4 }}</td>
+                                </tr>
+                            {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 4 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего групп </th>
+                                <th scope="col">от 2-х месяцев до 1 года </th>
+                                <th scope="col">от 1 года до 3-х лет </th>
+                                <th scope="col">от 3-х до 5 лет </th>
+                                <th scope="col">5 лет и старше </th>
+                                <th scope="col">разновозрастные </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r4.id }}</td>
+                                <td>{{ row.r4 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 5 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего групп </th>
+                                <th scope="col">от 2-х месяцев до 1 года </th>
+                                <th scope="col">от 1 года до 3-х лет </th>
+                                <th scope="col">от 3-х до 5 лет </th>
+                                <th scope="col">5 лет и старше </th>
+                                <th scope="col">разновозрастные </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r5.id }}</td>
+                                <td>{{ row.r5 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 6 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего групп </th>
+                                <th scope="col">от 2-х месяцев до 1 года </th>
+                                <th scope="col">от 1 года до 3-х лет </th>
+                                <th scope="col">от 3-х до 5 лет </th>
+                                <th scope="col">5 лет и старше </th>
+                                <th scope="col">разновозрастные </th>
+                                <th scope="col">с ограниченными возможностями здоровья </th>
+                                <th scope="col">из них дети-инвалиды </th>
+                                <th scope="col">дети-инвалиды, не учтенные в группах </th>
+                                <th scope="col">имеющие иностранное гражданство или имеющие несколько гражданств </th>
+                                <th scope="col">без гражданства </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r6.id }}</td>
+                                <td>{{ row.r6 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                                <td>{{ row.value10 }}</td>
+                                <td>{{ row.value11 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 7 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">0 лет </th>
+                                <th scope="col">1 год </th>
+                                <th scope="col">2 года </th>
+                                <th scope="col">3 года </th>
+                                <th scope="col">4 года </th>
+                                <th scope="col">5 лет </th>
+                                <th scope="col">6 лет </th>
+                                <th scope="col">7 лет и старше </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r7.id }}</td>
+                                <td>{{ row.r7 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 8 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей</th>
+                                <th scope="col">Численность воспитанников</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r8.id }}</td>
+                                <td>{{ row.r8 }}</td>
+                                <td>{{ row.value1 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 9 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Высшее образование </th>
+                                <th scope="col">Высшее педагогическое образование </th>
+                                <th scope="col">Среднее профессиональное образование по программам подготовки специалистов среднего звена </th>
+                                <th scope="col">Cреднее профессиональное педагогическое образование</th>
+                                <th scope="col">Всего женщин</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r9.id }}</td>
+                                <td>{{ row.r9 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 10 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего</th>
+                                <th scope="col">моложе 25 лет </th>
+                                <th scope="col">25-29 </th>
+                                <th scope="col">30-34 </th>
+                                <th scope="col">35-39 </th>
+                                <th scope="col">40-44 </th>
+                                <th scope="col">45-49 </th>
+                                <th scope="col">50-54 </th>
+                                <th scope="col">55-59 </th>
+                                <th scope="col">60-64</th>
+                                <th scope="col">65 и старше</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r10.id }}</td>
+                                <td>{{ row.r10 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                                <td>{{ row.value10 }}</td>
+                                <td>{{ row.value11}}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 11 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего с общим стажем </th>
+                                <th scope="col">с общим стажем до 3 лет </th>
+                                <th scope="col">с общим стажем от 3 до 5 лет </th>
+                                <th scope="col">с общим стажем от 5 до 10 лет </th>
+                                <th scope="col">с общим стажем от 10 до 15 лет </th>
+                                <th scope="col">с общим стажем от 15 до 20 лет </th>
+                                <th scope="col">с общим стажем от 20 и более лет </th>
+                                <th scope="col">Из общей численности работников имеют педагогический стаж (всего) </th>
+                                <th scope="col">с педагогическим стажем до 3 лет </th>
+                                <th scope="col">с педагогическим стажем от 3 до 5 лет </th>
+                                <th scope="col">с педагогическим стажем от 5 до 10 лет </th>
+                                <th scope="col">с педагогическим стажем от 10 до 15 лет </th>
+                                <th scope="col">с педагогическим стажем от 15 до 20 лет </th>
+                                <th scope="col">с педагогическим стажем от 20 и более лет </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r11.id }}</td>
+                                <td>{{ row.r11 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                                <td>{{ row.value10 }}</td>
+                                <td>{{ row.value11 }}</td>
+                                <td>{{ row.value12 }}</td>
+                                <td>{{ row.value13 }}</td>
+                                <td>{{ row.value14 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 12 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Всего женщин </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r12.id }}</td>
+                                <td>{{ row.r12 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 13 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Число ставок по штату, ед. </th>
+                                <th scope="col">Всего фактически занято </th>
+                                <th scope="col">Фактически занято работниками списочного состава </th>
+                                <th scope="col">Численность работников на начало отчетного года (без внешних совместителей и работающих по договорам гражданско- правового характера) </th>
+                                <th scope="col">Всего принято работников </th>
+                                <th scope="col">Принято работников, являющимися выпускниками со средним профессиональным образованием по программам подготовки специалистов среднего звена </th>
+                                <th scope="col">Принято работников, являющимися выпускниками с высшим образованием </th>
+                                <th scope="col">Всего выбыло работников </th>
+                                <th scope="col">Выбыло работников по собственному желанию </th>
+                                <th scope="col">Численность работников на конец отчетного года (без совместителей и работающих по договорам гражданско-правового характера) </th>
+                                <th scope="col">Число вакантных должностей</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r13.id }}</td>
+                                <td>{{ row.r13 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                                <td>{{ row.value10 }}</td>
+                                <td>{{ row.value11 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 14 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Оборудовано водопроводом </th>
+                                <th scope="col">Оборудовано водоотведением (канализацией) </th>
+                                <th scope="col">Оборудовано центральным отоплением </th>
+                                <th scope="col">Оборудовано системой видеонаблюдения </th>
+                                <th scope="col">Требует капитального ремонта </th>
+                                <th scope="col">Находится в аварийном состоянии </th>
+                                <th scope="col">Имеет охрану </th>
+                                <th scope="col">Оборудовано автоматической пожарной сигнализацией </th>
+                                <th scope="col">Имеет дымовые извещатели </th>
+                                <th scope="col">Имеет пожарные краны и рукава </th>
+                                <th scope="col">Оборудовано кнопкой тревожной сигнализации </th>
+                                <th scope="col">Доступно для маломобильных групп населения </th>
+                                <th scope="col">Скорость Интернета ниже 256 Кбит/сек </th>
+                                <th scope="col">Скорость Интернета 256 - 511 Кбит/сек </th>
+                                <th scope="col">Скорость Интернета 512 Кбит/сек - 999 Кбит/сек </th>
+                                <th scope="col">Скорость Интернета 1.0 - 1.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 2.0 - 29.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 30.0 - 49.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 50.0 - 99.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 100 Мбит/сек и выше </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r14.id }}</td>
+                                <td>{{ row.r14 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                                <td>{{ row.value10 }}</td>
+                                <td>{{ row.value11 }}</td>
+                                <td>{{ row.value12 }}</td>
+                                <td>{{ row.value13 }}</td>
+                                <td>{{ row.value14 }}</td>
+                                <td>{{ row.value15 }}</td>
+                                <td>{{ row.value16 }}</td>
+                                <td>{{ row.value17 }}</td>
+                                <td>{{ row.value18 }}</td>
+                                <td>{{ row.value19 }}</td>
+                                <td>{{ row.value20 }}</td>
+                                <td>{{ row.value21 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 15 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Стены здания: каменные </th>
+                                <th scope="col">Стены здания: кирпичные </th>
+                                <th scope="col">Стены здания: панельные </th>
+                                <th scope="col">Стены здания: блочные </th>
+                                <th scope="col">Стены здания: деревянные </th>
+                                <th scope="col">Стены здания: монолитные </th>
+                                <th scope="col">Стены здания: смешанные </th>
+                                <th scope="col">Стены здания: из прочих стеновых материалов </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r15.id }}</td>
+                                <td>{{ row.r15 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 16 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Наличие в организации, код: да - 1, нет - 2</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r16.id }}</td>
+                                <td>{{ row.r16 }}</td>
+                                <td>{{ row.value1 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 17 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Площадь, сданная в аренду и/или субаренду </th>
+                                <th scope="col">Площадь на правах собственности </th>
+                                <th scope="col">Площадь в оперативном управлении </th>
+                                <th scope="col">Арендованная площадь </th>
+                                <th scope="col">Площадь в другой форме владения </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r17.id }}</td>
+                                <td>{{ row.r17 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 18 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Наличие в организации, код: да - 1, нет - 2</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r18.id }}</td>
+                                <td>{{ row.r18 }}</td>
+                                <td>{{ row.value1 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 19 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Наличие в организации, код: да - 1, нет - 2</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r19.id }}</td>
+                                <td>{{ row.r19 }}</td>
+                                <td>{{ row.value1 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 20 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">в том числе доступные для использования воспитанниками </th>
+                                <th scope="col"> </th>
+                                <th scope="col"> </th>
+                                <th scope="col"> </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r20.id }}</td>
+                                <td>{{ row.r20 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 21 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">из них по образовательной деятельности </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r21.id }}</td>
+                                <td>{{ row.r21 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 22 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">из них осуществляемые за счет средств бюджетов всех уровней (субсидий) </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r22.id }}</td>
+                                <td>{{ row.r22 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 23 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Средняя численность работников списочного состава (без внешних совместителей) </th>
+                                <th scope="col">Средняя численность работников внешних совместителей </th>
+                                <th scope="col">Фонд начисленной заработной платы работников, тыс. руб, списочного состава (без внешних совместителей) Всего </th>
+                                <th scope="col">Фонд начисленной заработной платы работников, тыс. руб, списочного состава (без внешних совместителей) в том числе по внутреннему совместительству </th>
+                                <th scope="col">Фонд начисленной заработной платы работников, тыс. руб, внешних совместителей </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из всего списочного состава (без внешних совместителей) за счет средств бюджетов всех уровней (субсидий) </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из всего списочного состава (без внешних совместителей) ОМС </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из всего списочного состава (без внешних совместителей) средства от приносящей доход деятельности </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из внешних совместителей за счет средств бюджетов всех уровней (субсидий) </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из внешних совместителей ОМС </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из внешних совместителей средства от приносящей доход деятельности </th>
+
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r23.id }}</td>
+                                <td>{{ row.r23 }}</td>
+                                <td>{{ row.value1 }}</td>
+                                <td>{{ row.value2 }}</td>
+                                <td>{{ row.value3 }}</td>
+                                <td>{{ row.value4 }}</td>
+                                <td>{{ row.value5 }}</td>
+                                <td>{{ row.value6 }}</td>
+                                <td>{{ row.value7 }}</td>
+                                <td>{{ row.value8 }}</td>
+                                <td>{{ row.value9 }}</td>
+                                <td>{{ row.value10 }}</td>
+                                <td>{{ row.value11 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 24 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r24.id }}</td>
+                                <td>{{ row.r24 }}</td>
+                                <td>{{ row.value1 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% elif flag == 25 %}
+
+            <h1 class="text-break">{{title}}</h1>
+            {% if warning != '' %}
+                <p>{{warning}}</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in VR %}
+                            <tr>
+                                <td >{{ row.r25.id }}</td>
+                                <td>{{ row.r25 }}</td>
+                                <td>{{ row.value1 }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <a href="{% url 'buildinfo' id_build %}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Вернуться на главную страницу организации</a>
+
+
+
+    </div>
+</article>
+
+{% endblock content %}

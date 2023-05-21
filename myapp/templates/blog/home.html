@@ -1,0 +1,111 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+
+<script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/init.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/raphael.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/mapPaths.js' %}"></script>
+<style>
+#map {
+    position: relative;
+    left: -68px;
+}
+#mapTitle {
+    background: url("{% static 'map/map-line.png' %}") 100% 49% no-repeat;
+    padding-right: 72px;
+    font-weight: 700;
+	color:#000000;
+}
+#mapTitle.empty {
+	background: url("{% static 'map/map-line-empty.png' %}") 100% 49% no-repeat;
+	color:#000000;
+    opacity: 0.8;
+}
+.mapPoint {
+    position: absolute;
+    display: block;
+    background: url("{% static 'map/map-point.png' %}") 0 0 no-repeat;
+    text-decoration: none;
+    color: #000;
+    padding-left: 14px;
+    width: 11px;
+    min-height: 11px;
+}
+.mapPoint.empty {
+	background: url("{% static 'map/map-point-empty.png' %}") 0 0 no-repeat;
+}
+.mapPoint span {
+    display: none;
+    font-size: 12px;
+    color: #000000;
+    position: relative;
+    top: -17px;
+    left: -15px;
+}
+.mapPoint.empty span {
+    color: #000000;
+    opacity: 0.8;
+}
+.mapPoint.left span {
+    left: -54px;
+    top: -16px;
+}
+.mapPoint.side span {
+    left: 0;
+    top: -4px;
+    line-height: 10px;
+}
+.mapCenter {
+    font-size: 16px;
+    font-weight: 700;
+    position: absolute;
+    text-decoration: none;
+    color: #000;
+    left: 279px;
+    top: 128px;
+}
+</style>
+<h1>Интерактивная карта Воронежской области</h1>
+	<div id="map">
+		<a class="mapPoint" style="left: 258px; top: 136px"></a>
+		<a class="mapPoint" style="left: 300px; top: 98px"></a>
+		<a class="mapPoint" style="left: 191px; top: 160px"></a>
+		<a class="mapPoint" style="left: 240px; top: 160px"></a>
+		<a class="mapPoint" style="left: 347px; top: 196px"></a>
+		<a class="mapPoint" style="left: 217px; top: 251px"></a>
+		<a class="mapPoint" style="left: 256px; top: 296px"></a>
+		<a class="mapPoint" style="left: 308px; top: 312px"></a>
+		<a class="mapPoint" style="left: 289px; top: 400px"></a>
+		<a class="mapPoint" style="left: 322px; top: 410px"></a>
+		<a class="mapPoint" style="left: 334px; top: 373px"></a>
+		<a class="mapPoint" style="left: 361px; top: 506px"></a>
+		<a class="mapPoint" style="left: 440px; top: 472px"></a>
+		<a class="mapPoint" style="left: 478px; top: 437px"></a>
+		<a class="mapPoint" style="left: 422px; top: 420px"></a>
+		<a class="mapPoint" style="left: 502px; top: 370px"></a>
+		<a class="mapPoint" style="left: 486px; top: 331px"></a>
+		<a class="mapPoint" style="left: 396px; top: 356px"></a>
+		<a class="mapPoint" style="left: 446px; top: 300px"></a>
+		<a class="mapPoint" style="left: 341px; top: 282px"></a>
+		<a class="mapPoint" style="left: 382px; top: 254px"></a>
+		<a class="mapPoint" style="left: 466px; top: 242px"></a>
+		<a class="mapPoint" style="left: 568px; top: 245px"></a>
+		<a class="mapPoint" style="left: 638px; top: 231px"></a>
+		<a class="mapPoint" style="left: 638px; top: 186px"></a>
+		<a class="mapPoint" style="left: 604px; top: 182px"></a>
+		<a class="mapPoint" style="left: 427px; top: 176px"></a>
+		<a class="mapPoint" style="left: 395px; top: 150px"></a>
+		<a class="mapPoint" style="left: 311px; top: 152px"></a>
+		<a class="mapPoint" style="left: 372px; top: 110px"></a>
+		<a class="mapPoint" style="left: 470px; top: 114px"></a>
+		<a class="mapPoint" style="left: 558px; top: 146px"></a>
+		<a class="mapPoint" style="left: 285px; top: 210px"></a>
+		<a class="mapPoint" style="left: 290px; top: 150px"></a>
+	</div>
+		    </div>
+</article>
+
+{% endblock content %}

@@ -1,0 +1,78 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+{% if flag == True %}
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center">{{text.name}}</h1><br>
+            <ul class="list-group">
+                {% for build in builds %}
+                    <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }}</a></li>
+                {% endfor %}
+            </ul>
+    </div>
+</article>
+{% else %}
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center"> {{text8.name}} </h1><br>
+        <ul class="list-group">
+            {% for build in build8 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary">  {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center"> {{text9.name}} </h1><br>
+        <ul class="list-group">
+            {% for build in build9 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center"> {{text10.name}} </h1><br>
+        <ul class="list-group">
+            {% for build in build10 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center"> {{text11.name}} </h1><br>
+        <ul class="list-group">
+            {% for build in build11 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center"> {{text12.name}} </h1><br>
+        <ul class="list-group">
+            {% for build in build12 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center"> {{text13.name}} </h1><br>
+        <ul class="list-group">
+            {% for build in build13 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+{% endif %}
+
+{% endblock content %}
