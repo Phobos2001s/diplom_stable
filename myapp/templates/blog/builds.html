@@ -1,13 +1,37 @@
 {% extends "blog/base.html" %}
 {% load static %}
+{% load bootstrap_icons %}
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% if flag == True %}
 <article class="media content-section">
     <div class="media-body">
         <h1 align="center">{{text.name}}</h1><br>
+		<div class="card border-info text-center" style="width: 35rem; margin: auto;" >
+			<div class="card"  >
+				<div class="card-body">
+					<h5 class="card-title" align="center">Информация по муниципалитету</h5>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Количество учреждений дошкольного образования: {{count_build}}</li>
+						<li class="list-group-item">Количество обучающихся: {{count_students.students__sum}}</li>
+						<li class="list-group-item">Количество работников ОО: {{count_workers.workers__sum}}</li>
+					</ul>
+				</div>
+			</div>
+		</div><br>
+        <form action="{% url 'info' id_info %}" method="get">
+            <div class="input-group">
+                <label for="search"></label>
+                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary"><i> {% bs_icon 'search' %}</i></button>
+                </div>
+            </div>
+        </form>
+        <br><br>
             <ul class="list-group">
                 {% for build in builds %}
-                    <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }}</a></li>
+                    <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }}</a></li>
                 {% endfor %}
             </ul>
     </div>
@@ -15,60 +39,85 @@
 {% else %}
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center"> {{text8.name}} </h1><br>
+        <h1 align="center">Воронеж</h1><br>
+        <div class="card border-info text-center" style="width: 35rem; margin: auto;">
+			<div class="card"  >
+				<div class="card-body">
+					<h5 class="card-title" align="center">Информация по муниципалитету</h5>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Количество учреждений дошкольного образования: {{count_build}}</li>
+						<li class="list-group-item">Количество обучающихся: {{count_students.students__sum}}</li>
+						<li class="list-group-item">Количество работников ОО: {{count_workers.workers__sum}}</li>
+					</ul>
+				</div>
+			</div>
+		</div><br>
+
+        <form action="{% url 'info' id_info %}" method="get">
+            <div class="input-group">
+                <label for="search"></label>
+                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary"><i>{% bs_icon 'search' %}</i></button>
+                </div>
+            </div>
+        </form>
+        <br><br>
+
+        <h3 align="center"> {{text8.name}} </h3><br>
         <ul class="list-group">
             {% for build in build8 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary">  {{build.name }} </a></li>
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
             {% endfor %}
         </ul>
     </div>
 </article>
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center"> {{text9.name}} </h1><br>
+        <h3 align="center"> {{text9.name}} </h3><br>
         <ul class="list-group">
             {% for build in build9 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
             {% endfor %}
         </ul>
     </div>
 </article>
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center"> {{text10.name}} </h1><br>
+        <h3 align="center"> {{text10.name}} </h3><br>
         <ul class="list-group">
             {% for build in build10 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
             {% endfor %}
         </ul>
     </div>
 </article>
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center"> {{text11.name}} </h1><br>
+        <h3 align="center"> {{text11.name}} </h3><br>
         <ul class="list-group">
             {% for build in build11 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
             {% endfor %}
         </ul>
     </div>
 </article>
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center"> {{text12.name}} </h1><br>
+        <h3 align="center"> {{text12.name}} </h3><br>
         <ul class="list-group">
             {% for build in build12 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
             {% endfor %}
         </ul>
     </div>
 </article>
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center"> {{text13.name}} </h1><br>
+        <h3 align="center"> {{text13.name}} </h3><br>
         <ul class="list-group">
             {% for build in build13 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-secondary"> {{build.name }} </a></li>
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
             {% endfor %}
         </ul>
     </div>

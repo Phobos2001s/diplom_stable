@@ -3,7 +3,7 @@
 	var basepath = "info/";
 
 
-	var w = 740;
+	var w = 720;
 	var h = 600;
 
  	var r = Raphael('map',w,h),

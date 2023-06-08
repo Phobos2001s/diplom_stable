@@ -26,9 +26,14 @@ class Builds(models.Model):
     id_reg = models.ForeignKey(Regions, on_delete=models.CASCADE, verbose_name='Регион')
     name = models.TextField(max_length=300, verbose_name='Наименование оганизации')
     adres = models.TextField(max_length=300, blank=True, verbose_name='Юридический адрес')
-    logo = models.ImageField(blank=True, verbose_name='Логотип', help_text='Логотип организации', upload_to='images/')
+    logo = models.ImageField(blank=True, verbose_name='Логотип', upload_to='images/')
     FIO = models.CharField(max_length=300, blank=True, verbose_name='ФИО руководителя')
-    link = models.FileField(null=True, blank=True, upload_to='docs/', verbose_name='Документ')
+    telephone = models.CharField(max_length=300, blank=True, null=True, verbose_name='Телефон')
+    email = models.CharField(max_length=300, blank=True, null=True, verbose_name='Адрес электронной почты')
+    site = models.CharField(max_length=300, blank=True, null=True, verbose_name='Адрес сайта организации')
+    workers = models.IntegerField(blank=True, null=True, verbose_name='Количество педогогических работников')
+    students = models.IntegerField(blank=True, null=True, verbose_name='Количество учеников')
+    link = models.FileField(upload_to='docs/', verbose_name='Документ', default='docs/default/template.xlsx')
 
     def __str__(self):
         return self.name
@@ -41,6 +46,7 @@ class Builds(models.Model):
 class BuildDocs(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     build = models.ForeignKey(Builds, on_delete=models.CASCADE, verbose_name='Организация')
+
 
     def __str__(self):
         return self.build.name

@@ -1,0 +1,21 @@
+{% extends "blog/baselk.html" %}
+{% load static %}
+{% load bootstrap5 %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center">Редактирование данных пользователя</h1><br>
+        <form method="post">
+            <div class="form-group">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Cохранить изменения</button>
+                {% endbuttons %}
+            </div>
+
+            <!--<button type="submit" class="btn btn-primary">Cохранить изменения</button>-->
+        </form>
+    </div>
+</article>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "blog/baselk.html" %}
+{% load static %}
+{% load bootstrap5 %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center">Редактирование данных об организации</h1><br>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group custom-file">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+            </div>
+
+            <br><br><a href="/files/template.xlsx" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Cачать шаблон для заполнения</a><br><br>
+
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Cохранить изменения</button>
+            {% endbuttons %}
+        </form>
+    </div>
+</article>
+{% endblock content %}

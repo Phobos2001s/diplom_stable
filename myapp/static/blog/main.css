@@ -120,3 +120,56 @@ footer a:hover {
   color:#777;
   text-decoration: none;
 }
+
+
+#map {
+		position: relative;
+		  left: 0;
+		  right: 0;
+		  margin: 0 auto;
+	}
+	#mapTitle {
+		background: url("map/map-line.png") 100% 49% no-repeat;
+		padding-right: 72px;
+		font-weight: 700;
+		color:#000000;
+	}
+	#mapTitle.empty {
+		background: url("map/map-line-empty.png") 100% 49% no-repeat;
+		color:#000000;
+		opacity: 0.8;
+	}
+	.mapPoint {
+		position: absolute;
+		display: block;
+		background: url("map/map-point.png") 0 0 no-repeat;
+		text-decoration: none;
+		color: #000;
+		padding-left: 14px;
+		width: 11px;
+		min-height: 11px;
+	}
+	.mapPoint.empty {
+		background: url("map/map-point-empty.png") 0 0 no-repeat;
+	}
+	.mapPoint span {
+		display: none;
+		font-size: 12px;
+		color: #000000;
+		position: relative;
+		top: -17px;
+		left: -15px;
+	}
+	.mapPoint.empty span {
+		color: #000000;
+		opacity: 0.8;
+	}
+	.mapPoint.left span {
+		left: -54px;
+		top: -16px;
+	}
+	.mapPoint.side span {
+		left: 0;
+		top: -4px;
+		line-height: 10px;
+	}

@@ -1,0 +1,1224 @@
+{% extends "blog/baselk.html" %}
+{% load static %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body" style="overflow-x:auto;">
+        <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
+
+        {% if flag == 1 %}
+
+            <h1 align="center">{{title}}</h1>
+            <br><br>
+            <a class="btn btn-success" href="{% url 'filter' %}" role="button">Сбросить фильтр</a>
+
+            {% if id == 0%}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Адрес</th>
+                                <th scope="col">ФИО руководителя</th>
+                                <th scope="col">Телефон</th>
+                                <th scope="col">Адрес электронной почты</th>
+                                <th scope="col">Адрес сайта организации</th>
+                                <th scope="col">Дополнительные сведения</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for row in data %}
+                                    <tr>
+                                        <td>{{row.id }}</td>
+                                        <td>{{row.name }}</td>
+                                        <td>{{row.adres }}</td>
+                                        <td>{{row.FIO }}</td>
+                                        <td>{{row.telephone }}</td>
+                                        <td>{{row.email }}</td>
+                                        <td>{{row.site }}</td>
+                                        <td><a href="{{row.link.url }}">Скачать документ</a></td>
+                                    </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 1%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателя</th>
+                                <th scope="col">Код</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td>{{row.r1_id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{row.r1 }}</td>
+                                        <td>{{row.value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 2%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Режим работы</th>
+                                <th scope="col">Численность воспитанников</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td>{{row.r2_id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{row.r2 }}</td>
+                                        <td>{{row.value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 3%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей</th>
+                                <th scope="col">Всего реализуемых образовательных программ</th>
+                                <th scope="col">Число образовательных программ реализуемых с использованием сетевой формы</th>
+                                <th scope="col">Общее число заключенных договоров с организациями на реализацию образовательных программ с использованием сетевой формы</th>
+                                <th scope="col">Численность воспитанников, обучающихся с применением сетевой формы</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td>{{ row.r3.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r3 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 4%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего групп </th>
+                                <th scope="col">от 2-х месяцев до 1 года </th>
+                                <th scope="col">от 1 года до 3-х лет </th>
+                                <th scope="col">от 3-х до 5 лет </th>
+                                <th scope="col">5 лет и старше </th>
+                                <th scope="col">разновозрастные </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r4.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r4 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 5%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего групп </th>
+                                <th scope="col">от 2-х месяцев до 1 года </th>
+                                <th scope="col">от 1 года до 3-х лет </th>
+                                <th scope="col">от 3-х до 5 лет </th>
+                                <th scope="col">5 лет и старше </th>
+                                <th scope="col">разновозрастные </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r5.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r5 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 6%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего групп </th>
+                                <th scope="col">от 2-х месяцев до 1 года </th>
+                                <th scope="col">от 1 года до 3-х лет </th>
+                                <th scope="col">от 3-х до 5 лет </th>
+                                <th scope="col">5 лет и старше </th>
+                                <th scope="col">разновозрастные </th>
+                                <th scope="col">с ограниченными возможностями здоровья </th>
+                                <th scope="col">из них дети-инвалиды </th>
+                                <th scope="col">дети-инвалиды, не учтенные в группах </th>
+                                <th scope="col">имеющие иностранное гражданство или имеющие несколько гражданств </th>
+                                <th scope="col">без гражданства </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for d in dd %}
+                                    <tr>
+                                        <td >{{ row.r6.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r6 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                        <td>{{ row.value10 }}</td>
+                                        <td>{{ row.value11 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            {% if id == 7%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">0 лет </th>
+                                <th scope="col">1 год </th>
+                                <th scope="col">2 года </th>
+                                <th scope="col">3 года </th>
+                                <th scope="col">4 года </th>
+                                <th scope="col">5 лет </th>
+                                <th scope="col">6 лет </th>
+                                <th scope="col">7 лет и старше </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r7.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r7 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 8%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей</th>
+                                <th scope="col">Численность воспитанников</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r8.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r8 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 9%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Высшее образование </th>
+                                <th scope="col">Высшее педагогическое образование </th>
+                                <th scope="col">Среднее профессиональное образование по программам подготовки специалистов среднего звена </th>
+                                <th scope="col">Cреднее профессиональное педагогическое образование</th>
+                                <th scope="col">Всего женщин</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r9.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r9 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        {% if row.value2 == -1 %}
+                                            <td>X</td>
+                                        {% else %}
+                                            <td>{{ row.value2 }}</td>
+                                        {% endif %}
+                                        {% if row.value3 == -1 %}
+                                            <td>X</td>
+                                        {% else %}
+                                            <td>{{ row.value3 }}</td>
+                                        {% endif %}
+                                        {% if row.value4 == -1 %}
+                                            <td>X</td>
+                                        {% else %}
+                                            <td>{{ row.value4 }}</td>
+                                        {% endif %}
+                                        {% if row.value5 == -1 %}
+                                            <td>X</td>
+                                        {% else %}
+                                            <td>{{ row.value5 }}</td>
+                                        {% endif %}
+                                        <td>{{ row.value6 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% if id == 10 %}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего</th>
+                                <th scope="col">моложе 25 лет </th>
+                                <th scope="col">25-29 </th>
+                                <th scope="col">30-34 </th>
+                                <th scope="col">35-39 </th>
+                                <th scope="col">40-44 </th>
+                                <th scope="col">45-49 </th>
+                                <th scope="col">50-54 </th>
+                                <th scope="col">55-59 </th>
+                                <th scope="col">60-64</th>
+                                <th scope="col">65 и старше</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r10.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r10 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                        <td>{{ row.value10 }}</td>
+                                        <td>{{ row.value11}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 11%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего с общим стажем </th>
+                                <th scope="col">с общим стажем до 3 лет </th>
+                                <th scope="col">с общим стажем от 3 до 5 лет </th>
+                                <th scope="col">с общим стажем от 5 до 10 лет </th>
+                                <th scope="col">с общим стажем от 10 до 15 лет </th>
+                                <th scope="col">с общим стажем от 15 до 20 лет </th>
+                                <th scope="col">с общим стажем от 20 и более лет </th>
+                                <th scope="col">Из общей численности работников имеют педагогический стаж (всего) </th>
+                                <th scope="col">с педагогическим стажем до 3 лет </th>
+                                <th scope="col">с педагогическим стажем от 3 до 5 лет </th>
+                                <th scope="col">с педагогическим стажем от 5 до 10 лет </th>
+                                <th scope="col">с педагогическим стажем от 10 до 15 лет </th>
+                                <th scope="col">с педагогическим стажем от 15 до 20 лет </th>
+                                <th scope="col">с педагогическим стажем от 20 и более лет </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r11.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r11 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                        <td>{{ row.value10 }}</td>
+                                        <td>{{ row.value11 }}</td>
+                                        <td>{{ row.value12 }}</td>
+                                        <td>{{ row.value13 }}</td>
+                                        <td>{{ row.value14 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 12%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Всего женщин </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r12.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r12 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% if id == 13%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Число ставок по штату, ед. </th>
+                                <th scope="col">Всего фактически занято </th>
+                                <th scope="col">Фактически занято работниками списочного состава </th>
+                                <th scope="col">Численность работников на начало отчетного года (без внешних совместителей и работающих по договорам гражданско- правового характера) </th>
+                                <th scope="col">Всего принято работников </th>
+                                <th scope="col">Принято работников, являющимися выпускниками со средним профессиональным образованием по программам подготовки специалистов среднего звена </th>
+                                <th scope="col">Принято работников, являющимися выпускниками с высшим образованием </th>
+                                <th scope="col">Всего выбыло работников </th>
+                                <th scope="col">Выбыло работников по собственному желанию </th>
+                                <th scope="col">Численность работников на конец отчетного года (без совместителей и работающих по договорам гражданско-правового характера) </th>
+                                <th scope="col">Число вакантных должностей</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r13.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r13 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                        <td>{{ row.value10 }}</td>
+                                        <td>{{ row.value11 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 14%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Оборудовано водопроводом </th>
+                                <th scope="col">Оборудовано водоотведением (канализацией) </th>
+                                <th scope="col">Оборудовано центральным отоплением </th>
+                                <th scope="col">Оборудовано системой видеонаблюдения </th>
+                                <th scope="col">Требует капитального ремонта </th>
+                                <th scope="col">Находится в аварийном состоянии </th>
+                                <th scope="col">Имеет охрану </th>
+                                <th scope="col">Оборудовано автоматической пожарной сигнализацией </th>
+                                <th scope="col">Имеет дымовые извещатели </th>
+                                <th scope="col">Имеет пожарные краны и рукава </th>
+                                <th scope="col">Оборудовано кнопкой тревожной сигнализации </th>
+                                <th scope="col">Доступно для маломобильных групп населения </th>
+                                <th scope="col">Скорость Интернета ниже 256 Кбит/сек </th>
+                                <th scope="col">Скорость Интернета 256 - 511 Кбит/сек </th>
+                                <th scope="col">Скорость Интернета 512 Кбит/сек - 999 Кбит/сек </th>
+                                <th scope="col">Скорость Интернета 1.0 - 1.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 2.0 - 29.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 30.0 - 49.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 50.0 - 99.9 Мбит/сек </th>
+                                <th scope="col">Скорость Интернета 100 Мбит/сек и выше </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r14.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r14 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                        <td>{{ row.value10 }}</td>
+                                        <td>{{ row.value11 }}</td>
+                                        <td>{{ row.value12 }}</td>
+                                        <td>{{ row.value13 }}</td>
+                                        <td>{{ row.value14 }}</td>
+                                        <td>{{ row.value15 }}</td>
+                                        <td>{{ row.value16 }}</td>
+                                        <td>{{ row.value17 }}</td>
+                                        <td>{{ row.value18 }}</td>
+                                        <td>{{ row.value19 }}</td>
+                                        <td>{{ row.value20 }}</td>
+                                        <td>{{ row.value21 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 15%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Стены здания: каменные </th>
+                                <th scope="col">Стены здания: кирпичные </th>
+                                <th scope="col">Стены здания: панельные </th>
+                                <th scope="col">Стены здания: блочные </th>
+                                <th scope="col">Стены здания: деревянные </th>
+                                <th scope="col">Стены здания: монолитные </th>
+                                <th scope="col">Стены здания: смешанные </th>
+                                <th scope="col">Стены здания: из прочих стеновых материалов </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r15.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r15 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 16%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Наличие в организации, код: да - 1, нет - 2</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r16.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r16 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 17%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">Площадь, сданная в аренду и/или субаренду </th>
+                                <th scope="col">Площадь на правах собственности </th>
+                                <th scope="col">Площадь в оперативном управлении </th>
+                                <th scope="col">Арендованная площадь </th>
+                                <th scope="col">Площадь в другой форме владения </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r17.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r17 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 18%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Наличие в организации, код: да - 1, нет - 2</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r18.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r18 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% if id == 19%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Наличие в организации, код: да - 1, нет - 2</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r19.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r19 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 20 %}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">в том числе доступные для использования воспитанниками </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r20.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r20 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        {% if row.value2 == -1 %}
+                                            <td>X</td>
+                                        {% else %}
+                                            <td>{{ row.value2 }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 21%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">из них по образовательной деятельности </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r21.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r21 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        {% if row.value2 == -1 %}
+                                            <td>X</td>
+                                        {% else %}
+                                            <td>{{ row.value2 }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        {% if id == 22%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+                                <th scope="col">из них осуществляемые за счет средств бюджетов всех уровней (субсидий) </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r22.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r22 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 23%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Средняя численность работников списочного состава (без внешних совместителей) </th>
+                                <th scope="col">Средняя численность работников внешних совместителей </th>
+                                <th scope="col">Фонд начисленной заработной платы работников, тыс. руб, списочного состава (без внешних совместителей) Всего </th>
+                                <th scope="col">Фонд начисленной заработной платы работников, тыс. руб, списочного состава (без внешних совместителей) в том числе по внутреннему совместительству </th>
+                                <th scope="col">Фонд начисленной заработной платы работников, тыс. руб, внешних совместителей </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из всего списочного состава (без внешних совместителей) за счет средств бюджетов всех уровней (субсидий) </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из всего списочного состава (без внешних совместителей) ОМС </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из всего списочного состава (без внешних совместителей) средства от приносящей доход деятельности </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из внешних совместителей за счет средств бюджетов всех уровней (субсидий) </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из внешних совместителей ОМС </th>
+                                <th scope="col">Фонд начисленной заработной платы работников по источникам финансирования из внешних совместителей средства от приносящей доход деятельности </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r23.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r23 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                        <td>{{ row.value2 }}</td>
+                                        <td>{{ row.value3 }}</td>
+                                        <td>{{ row.value4 }}</td>
+                                        <td>{{ row.value5 }}</td>
+                                        <td>{{ row.value6 }}</td>
+                                        <td>{{ row.value7 }}</td>
+                                        <td>{{ row.value8 }}</td>
+                                        <td>{{ row.value9 }}</td>
+                                        <td>{{ row.value10 }}</td>
+                                        <td>{{ row.value11 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 24%}
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Наименование организации</th>
+                                <th scope="col">Наименование показателей </th>
+                                <th scope="col">Всего </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dd in data %}
+                                {% for row in dd %}
+                                    <tr>
+                                        <td >{{ row.r24.id }}</td>
+                                        <td>{{row.doc}}</td>
+                                        <td>{{ row.r24 }}</td>
+                                        <td>{{ row.value1 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if id == 25%}
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Наименование организации</th>
+                                    <th scope="col">Наименование показателей </th>
+                                    <th scope="col">Всего </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dd in data %}
+                                    {% for row in dd %}
+                                        <tr>
+                                            <td >{{ row.r25.id }}</td>
+                                            <td>{{row.doc}}</td>
+                                            <td>{{ row.r25 }}</td>
+                                            <td>{{ row.value1 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+        {% else %}
+            <h1 align="center">Выберете организацию из предложенного списка</h1><br>
+
+            <form action="{% url 'filter' %}" method="get">
+                <div class="checkselect">
+                    {% for r in region %}
+                        <label><input type="checkbox" name="regions[]" value="{{ r.id }}">{{r.name}}</label>
+                    {% endfor %}
+                </div>
+                <div class="checkselect">
+                    <label><input type="radio" name="VR" value="0" checked>Общие сведения</label>
+                    <label><input type="radio" name="VR" value="1">Раздел 1</label>
+                    <label><input type="radio" name="VR" value="2">Раздел 2</label>
+                    <label><input type="radio" name="VR" value="3">Раздел 3</label>
+                    <label><input type="radio" name="VR" value="4">Раздел 4</label>
+                    <label><input type="radio" name="VR" value="5">Раздел 5</label>
+                    <label><input type="radio" name="VR" value="6">Раздел 6</label>
+                    <label><input type="radio" name="VR" value="7">Раздел 7</label>
+                    <label><input type="radio" name="VR" value="8">Раздел 8</label>
+                    <label><input type="radio" name="VR" value="9">Раздел 9</label>
+                    <label><input type="radio" name="VR" value="10">Раздел 10</label>
+                    <label><input type="radio" name="VR" value="11">Раздел 11</label>
+                    <label><input type="radio" name="VR" value="12">Раздел 12</label>
+                    <label><input type="radio" name="VR" value="13">Раздел 13</label>
+                    <label><input type="radio" name="VR" value="14">Раздел 14</label>
+                    <label><input type="radio" name="VR" value="15">Раздел 15</label>
+                    <label><input type="radio" name="VR" value="16">Раздел 16</label>
+                    <label><input type="radio" name="VR" value="17">Раздел 17</label>
+                    <label><input type="radio" name="VR" value="18">Раздел 18</label>
+                    <label><input type="radio" name="VR" value="19">Раздел 19</label>
+                    <label><input type="radio" name="VR" value="20">Раздел 20</label>
+                    <label><input type="radio" name="VR" value="21">Раздел 21</label>
+                    <label><input type="radio" name="VR" value="22">Раздел 22</label>
+                    <label><input type="radio" name="VR" value="23">Раздел 23</label>
+                    <label><input type="radio" name="VR" value="24">Раздел 24</label>
+                    <label><input type="radio" name="VR" value="25">Раздел 25</label>
+                </div>
+                <br><br>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Применить фильтры</button>
+                </div>
+                <br><br>
+                {% for build in builds %}
+                    {% for b in build %}
+
+
+                        <div class="form-check">
+                            <label class="form-check-label" for="builds"><input type="checkbox" class="form-check-input" name="buildinfo[]" value="{{b.build.id}}" id="builds">{{b.build.id}}. {{b}}</label>
+                        </div>
+                    {% endfor %}
+
+                {% endfor %}
+            </form>
+            <br><br>
+        {% endif %}
+
+
+
+
+
+
+		<style type="text/css">
+
+
+.checkselect {
+	position: relative;
+	display: inline-block;
+	min-width: 200px;
+	text-align: left;
+}
+.checkselect-control {
+	position: relative;
+	padding: 0 !important;
+}
+.checkselect-control select {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	margin: 0;
+	padding-left: 5px;
+	height: 40px;
+}
+.checkselect-over {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	cursor: pointer;
+}
+.checkselect-popup {
+	display: none;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: auto;
+	max-height: 200px;
+	position: absolute;
+	top: 100%;
+	left: 0px;
+	border: 1px solid #dadada;
+	border-top: none;
+	background: #fff;
+	z-index: 9999;
+	overflow: auto;
+	user-select: none;
+}
+.checkselect label {
+	position: relative;
+	display: block;
+	margin: 0;
+	padding: 4px 6px 4px 25px;
+	font-weight: normal;
+	font-size: 1em;
+	line-height: 1.1;
+	cursor: pointer;
+}
+.checkselect-popup input {
+	position: absolute;
+	top: 5px;
+	left: 8px;
+	margin: 0 !important;
+	padding: 0;
+}
+.checkselect-popup label:hover {
+	background: #03a2ff;
+	color: #fff;
+}
+.checkselect-popup fieldset {
+	display: block;
+	margin:  0;
+	padding: 0;
+	border: none;
+}
+.checkselect-popup fieldset input {
+	left: 15px;
+}
+.checkselect-popup fieldset label {
+	padding-left: 32px;
+}
+.checkselect-popup legend {
+	display: block;
+	margin: 0;
+	padding: 5px 8px;
+	font-weight: 700;
+	font-size: 1em;
+	line-height: 1.1;
+}
+</style>
+<script>
+(function($) {
+	function setChecked(target) {
+		var checked = $(target).find("input[type='checkbox']:checked").length;
+		if (checked) {
+			$(target).find('select option:first').html('Выбрано: ' + checked);
+		} else {
+			$(target).find('select option:first').html('Выберите из списка');
+		}
+	}
+
+	$.fn.checkselect = function() {
+		this.wrapInner('<div class="checkselect-popup"></div>');
+		this.prepend(
+			'<div class="checkselect-control">' +
+				'<select class="form-select"><option></option></select>' +
+				'<div class="checkselect-over"></div>' +
+			'</div>'
+		);
+
+		this.each(function(){
+			setChecked(this);
+		});
+		this.find('input[type="checkbox"]').click(function(){
+			setChecked($(this).parents('.checkselect'));
+		});
+
+		this.parent().find('.checkselect-control').on('click', function(){
+			$popup = $(this).next();
+			$('.checkselect-popup').not($popup).css('display', 'none');
+			if ($popup.is(':hidden')) {
+				$popup.css('display', 'block');
+				$(this).find('select').focus();
+			} else {
+				$popup.css('display', 'none');
+			}
+		});
+
+		$('html, body').on('click', function(e){
+			if ($(e.target).closest('.checkselect').length == 0){
+				$('.checkselect-popup').css('display', 'none');
+			}
+		});
+	};
+})(jQuery);
+
+$('.checkselect').checkselect();
+</script>
+
+
+
+		    </div>
+</article>
+
+{% endblock content %}

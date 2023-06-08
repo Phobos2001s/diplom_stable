@@ -1,10 +1,4 @@
-from itertools import islice
-from typing import Type
-
-import pandas
 import xlrd
-from django.db import models
-from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 from openpyxl.reader.excel import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -19,6 +13,7 @@ class Excel:
     OUT_PATH = 'files/generated/'
     START_ROW = 10
     START_COL = 2
+
 
     def load(self, path):
         # Load in the workbook

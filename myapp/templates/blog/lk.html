@@ -1,0 +1,27 @@
+{% extends "blog/baselk.html" %}
+{% load static %}
+{% load bootstrap_icons %}
+{% block content %}
+
+<article class="media content-section">
+    <div class="media-body">
+        <h1 align="center">Выберете организацию из предложенного списка</h1><br>
+        <form action="{% url 'lk' %}" method="get">
+            <div class="input-group">
+                <label for="search"></label>
+                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary"><i>{% bs_icon 'search' %}</i></button>
+                </div>
+            </div>
+        </form>
+        <br><br>
+
+        <ul class="list-group">
+            {% for build in builds %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'redact_data' build.build.id %}" class="text-primary">{{build.build.id}}. {{build }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+{% endblock content %}

@@ -22,18 +22,34 @@
                 {% else %}
                     <li class="list-group-item "> <p>Руководящее лицо: {{build.FIO }}</p></li>
                 {% endif %}
+
+                {% if build.telephone is None %}
+                     <li class="list-group-item "> <p>Телефон не указан</p></li>
+                {% else %}
+                    <li class="list-group-item "> <p>Телефон: {{build.telephone}}</p></li>
+                {% endif %}
+                {% if build.email is None %}
+                     <li class="list-group-item "> <p>Адрес электронной почты не указан</p></li>
+                {% else %}
+                    <li class="list-group-item "> <p>Адрес электронной почты: {{build.email}}</p></li>
+                {% endif %}
+                {% if build.site is None %}
+                     <li class="list-group-item "> <p>Адрес сайта организации не указан</p></li>
+                {% else %}
+                    <li class="list-group-item "> <p>Адрес сайта организации: {{build.site}}</p></li>
+                {% endif %}
+
+
             </ul>
         <div>
             <br>
             <h3 align="center">Дополнительные сведения</h3><br><br>
-            {% if l == '' %}
-                <p>К сожалению, дополнитьной информации пока нет :(</p>
-            {% else %}
-                <p>Для более полного исследования условий, которые способна предоставить образовательная организация, можно обратиться к форме N 85-k (Сведения о деятельности организации, осуществляющей образовательную деятельность по образовательным программам дошкольного образования, присмотр и уход за детьми)</p>
-                <a href="{% url 'VR' build.id 1 %}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Изучить форму для данной организации</a><br><br>
-                <p>Однако, вы можете также спокойно скачать данный документ с данного ресурса</p>
-                <a href="{{ build.link.url }}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Скачать документ</a>
-            {% endif %}
+
+            <p>Для более полного исследования условий, которые способна предоставить образовательная организация, можно обратиться к форме N 85-k (Сведения о деятельности организации, осуществляющей образовательную деятельность по образовательным программам дошкольного образования, присмотр и уход за детьми)</p>
+            <a href="{% url 'VR' build.id 1 %}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Изучить форму для данной организации</a><br><br>
+            <p>Однако, вы можете также спокойно скачать данный документ с данного ресурса</p>
+            <a href="{{ build.link.url  }}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Скачать документ</a>
+
         </div>
     </div>
 </article>

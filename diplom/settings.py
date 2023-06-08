@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp.apps.MyappConfig',
-    'data_browser',
     'import_export',
-    'crispy_forms',
-    'crispy_bootstrap4',
+    'data_browser',
+    'bootstrap5',
     'myapp.DatabaseController',
+    'django_bootstrap_icons',
+
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

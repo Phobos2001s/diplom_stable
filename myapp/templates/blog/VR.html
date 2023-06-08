@@ -6,7 +6,7 @@
 
         {% if flag == 1 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -34,7 +34,7 @@
 
         {% elif flag == 2 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -62,7 +62,7 @@
 
         {% elif flag == 3 %}
 
-           <h1 class="text-break">{{title}}</h1>
+           <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -96,7 +96,7 @@
 
         {% elif flag == 4 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -134,7 +134,7 @@
 
         {% elif flag == 5 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -172,7 +172,7 @@
 
         {% elif flag == 6 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -220,7 +220,7 @@
 
         {% elif flag == 7 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -264,7 +264,7 @@
 
         {% elif flag == 8 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -292,7 +292,7 @@
 
         {% elif flag == 9 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -316,10 +316,26 @@
                                 <td >{{ row.r9.id }}</td>
                                 <td>{{ row.r9 }}</td>
                                 <td>{{ row.value1 }}</td>
-                                <td>{{ row.value2 }}</td>
-                                <td>{{ row.value3 }}</td>
-                                <td>{{ row.value4 }}</td>
-                                <td>{{ row.value5 }}</td>
+                                {% if row.value2 == -1 %}
+                                    <td>X</td>
+                                {% else %}
+                                    <td>{{ row.value2 }}</td>
+                                {% endif %}
+                                {% if row.value3 == -1 %}
+                                    <td>X</td>
+                                {% else %}
+                                    <td>{{ row.value3 }}</td>
+                                {% endif %}
+                                {% if row.value4 == -1 %}
+                                    <td>X</td>
+                                {% else %}
+                                    <td>{{ row.value4 }}</td>
+                                {% endif %}
+                                {% if row.value5 == -1 %}
+                                    <td>X</td>
+                                {% else %}
+                                    <td>{{ row.value5 }}</td>
+                                {% endif %}
                                 <td>{{ row.value6 }}</td>
                             </tr>
                         {% endfor %}
@@ -330,7 +346,7 @@
 
         {% elif flag == 10 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -378,7 +394,7 @@
 
         {% elif flag == 11 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -432,7 +448,7 @@
 
         {% elif flag == 12 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -462,7 +478,7 @@
 
         {% elif flag == 13 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -510,7 +526,7 @@
 
         {% elif flag == 14 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -578,7 +594,7 @@
 
         {% elif flag == 15 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -620,7 +636,7 @@
 
         {% elif flag == 16 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -648,7 +664,7 @@
 
         {% elif flag == 17 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -686,7 +702,7 @@
 
         {% elif flag == 18 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -714,7 +730,7 @@
 
         {% elif flag == 19 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -742,7 +758,7 @@
 
         {% elif flag == 20 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -754,9 +770,6 @@
                                 <th scope="col">Наименование показателей </th>
                                 <th scope="col">Всего </th>
                                 <th scope="col">в том числе доступные для использования воспитанниками </th>
-                                <th scope="col"> </th>
-                                <th scope="col"> </th>
-                                <th scope="col"> </th>
                             </tr>
                       </thead>
                       <tbody>
@@ -765,7 +778,11 @@
                                 <td >{{ row.r20.id }}</td>
                                 <td>{{ row.r20 }}</td>
                                 <td>{{ row.value1 }}</td>
-                                <td>{{ row.value2 }}</td>
+                                {% if row.value2 == -1 %}
+                                    <td>X</td>
+                                {% else %}
+                                    <td>{{ row.value2 }}</td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                       </tbody>
@@ -775,7 +792,7 @@
 
         {% elif flag == 21 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -795,7 +812,11 @@
                                 <td >{{ row.r21.id }}</td>
                                 <td>{{ row.r21 }}</td>
                                 <td>{{ row.value1 }}</td>
-                                <td>{{ row.value2 }}</td>
+                                {% if row.value2 == -1 %}
+                                    <td>X</td>
+                                {% else %}
+                                    <td>{{ row.value2 }}</td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                       </tbody>
@@ -805,7 +826,7 @@
 
         {% elif flag == 22 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -835,7 +856,7 @@
 
         {% elif flag == 23 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -884,7 +905,7 @@
 
         {% elif flag == 24 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}
@@ -912,7 +933,7 @@
 
         {% elif flag == 25 %}
 
-            <h1 class="text-break">{{title}}</h1>
+            <h1 class="text-break" align="center">{{title}}</h1>
             {% if warning != '' %}
                 <p>{{warning}}</p>
             {% else %}

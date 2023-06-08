@@ -7,4 +7,9 @@ urlpatterns = [
     path('info/<int:id>/', views.info, name='info'),
     path('buildinfo/<int:id>/', views.buildinfo, name='buildinfo'),
     path('buildinfo/<int:id_build>/VR/<int:id>/', views.vr, name='VR'),
+    path('lk/', views.lk, name='lk'),
+    path('lk/redact_data/<int:build_id>/', views.redact_data, name='redact_data'),
+    path('userprofile/', views.userprofile, name='userprofile'),
+    path('filter/', views.filter, name='filter'),
+    # path('test/', views.test, name='test'),
 ]
