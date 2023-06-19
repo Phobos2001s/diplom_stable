@@ -1,6 +1,9 @@
 import django
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
+from django.views.generic import TemplateView
 
 from .models import Builds, Regions, VR1, VR25, VR24, VR23, VR22, VR21, VR20, VR19, VR18, VR17, VR16, \
     VR15, VR14, VR13, VR12, VR11, VR10, VR9, VR8, VR7, VR6, VR5, VR4, VR3, VR2
@@ -67,21 +70,39 @@ def load(request, doc_id):
     return render(request, 'test/excel_view.html', context)
 
 
-def home(request):
-    count_build = Builds.objects.count()
-    count_workers = Builds.objects.aggregate(Sum("workers"))
-    count_students = Builds.objects.aggregate(Sum("students"))
-    context = {'count_build': count_build, 'count_workers': count_workers, 'count_students': count_students}
-    return render(request, 'blog/home.html', context)
+def text_diagram():
+    data = [
+        [1, 'Соотношение организаций, погдавших данные по форме N 85-К'],
+        [2, 'Тип поселения, в которм расположены организации'],
+        [3, 'Режим работы групп и численность воспитанников в них'],
+        [4, 'Распределение персонала по уровню образования и полу'],
+        [5, 'Сведения о помещениях организации'],
+        [6, 'Оснащение дошкольной организации'],
+        [7, 'Техническое оснащение для детей-инвалидов и детей с ОВЗ'],
+        [8, 'Расходы организации'],
+        [9, 'Источники финансирования внутренних затрат дошкольной образовательной организацией на внедрение и использование цифровых технологий']
+    ]
+    return data
 
 
-def about(request):
-    return render(request, 'blog/about.html', {'title': 'Добавить информацию'})
+def smart_card(id):
+    if id == -1:
+        count_build = Builds.objects.count()
+        count_workers = Builds.objects.aggregate(Sum("workers"))
+        count_students = Builds.objects.aggregate(Sum("students"))
+        val1 = VR22.objects.select_related('r22').filter(r22_id=1).aggregate(Sum("value1"))
+        val2 = VR25.objects.select_related('r25').filter(r25_id=1).aggregate(Sum("value1"))
 
+        if val1['value1__sum'] is None:
+            val1 = 0
+        else:
+            val1 = val1['value1__sum']
+        if val2['value1__sum'] is None:
+            val2 = 0
+        else:
+            val2 = val2['value1__sum']
 
-def info(request, id):
-    query = request.GET.get('q')
-    if id == 0:
+    elif id == 0:
         count_build = Builds.objects.filter(
             Q(id_reg=8) | Q(id_reg=9) | Q(id_reg=10) | Q(id_reg=11) | Q(id_reg=12) | Q(id_reg=13)
         ).count()
@@ -94,6 +115,710 @@ def info(request, id):
             Q(id_reg=8) | Q(id_reg=9) | Q(id_reg=10) | Q(id_reg=11) | Q(id_reg=12) | Q(id_reg=13)
         ).aggregate(Sum("students"))
 
+        val1 = 0
+        val2 = 0
+
+        for i in range(8, 14):
+            val1n = VR22.objects.select_related('r22').filter(r22_id=1, doc__build__id_reg=i).aggregate(Sum("value1"))
+            val2n = VR25.objects.select_related('r25').filter(r25_id=1, doc__build__id_reg=i).aggregate(Sum("value1"))
+
+            if val1n['value1__sum'] is None:
+                val1 += 0
+            else:
+                val1 += val1n['value1__sum']
+            if val2n['value1__sum'] is None:
+                val2 += 0
+            else:
+                val2 += val2n['value1__sum']
+
+    else:
+        count_build = Builds.objects.filter(id_reg=id).count()
+        count_workers = Builds.objects.filter(id_reg=id).aggregate(Sum("workers"))
+        count_students = Builds.objects.filter(id_reg=id).aggregate(Sum("students"))
+        val1 = VR22.objects.select_related('r22').filter(r22_id=1, doc__build__id_reg=id).aggregate(Sum("value1"))
+        val2 = VR25.objects.select_related('r25').filter(r25_id=1, doc__build__id_reg=id).aggregate(Sum("value1"))
+
+        if val1['value1__sum'] is None:
+            val1 = 0
+        else:
+            val1 = val1['value1__sum']
+        if val2['value1__sum'] is None:
+            val2 = 0
+        else:
+            val2 = val2['value1__sum']
+
+    if count_workers['workers__sum'] is None:
+        count_workers = 0
+    else:
+        count_workers = count_workers['workers__sum']
+    if count_students['students__sum'] is None:
+        count_students = 0
+    else:
+        count_students = count_students['students__sum']
+
+    card_data = [
+        count_build,
+        count_students,
+        count_workers,
+        val1,
+        val2
+    ]
+
+    return card_data
+
+
+def smart_diagram_name(id_dia):
+    if id_dia == 2:
+        name = [
+            "Городская местность",
+            "Сельская местность"
+        ]
+    elif id_dia == 3:
+        name = [
+            "Численность воспитанников кратковременного пребывания (5 часов и менее)",
+            "Численность воспитанников сокращенного дня (8 - 10 часов)",
+            "Численность воспитанников полного дня (10,5 - 12 часов)",
+            "Численность воспитанников продленного дня (13 - 14 часов)",
+            "Численность воспитанников"
+        ]
+    elif id_dia == 4:
+        name = [
+            "Из всех работников имеют высшее образование",
+            "Высшее педагогическое образование",
+            "Сред. проф. образование по программам подготовки специалистов среднего звена",
+            "Сред. проф. педагогическое образование по программам подготовки специалистов среднего звена",
+            "Из всех работников всего женщин"
+        ]
+    elif id_dia == 5:
+        name = [
+            "Кабинет заведующего",
+            "Групповые комнаты",
+            "Спальни",
+            "Соляная комната/пещера",
+            "Комнаты для специалистов",
+            "Медицинский кабинет",
+            "Изолятор",
+            "Процедурный кабинет",
+            "Методический кабинет",
+            "Физкультурный/спортивный зал",
+            "Музыкальный зал",
+            "Плавательный бассейн",
+            "Зимний сад/экологическая комната",
+            "Подсобное помещение",
+            "Лаборатория",
+            "Места для личной гигиены",
+            "Раздевальная",
+            "Помещения для приготовления и раздачи пищи",
+            "Кинозал",
+            "Книгохранилище\библиотека",
+            "Фитобар"
+        ]
+    elif id_dia == 6:
+        name = [
+            "интерактивной доски, ин. стола, демонстр. экрана с мультимед. проектором",
+            "цифрового/интерактивного пола",
+            "бизибордов",
+            "стола для рисования в технике Эбру",
+            "сухого бассейна",
+            "светового стола для рисования песком",
+            "печатных книг/журналов для чтения воспитанниками",
+            "электронные средства обучения",
+            "магнитных досок",
+            "скалодрома",
+            "батута"
+        ]
+    elif id_dia == 7:
+        name = [
+            "пандуса",
+            "подъемника для детей",
+            "лифта для детей",
+            "инвалидных колясок",
+            "книг для слабовидящих",
+            "электронных обучающих материалов (игр и презентаций)",
+            "стационарного спортивного оборудования (тренажеров)",
+            "звуковые средства воспроизведения информации"
+        ]
+    elif id_dia == 8:
+        name = [
+            "Расходы - оплата труда и начисления на выплаты по оплате труда",
+            "Расходы - оплата работ, услуг",
+            "Расходы - социальное обеспечение",
+            "Расходы - прочие расходы",
+            "Поступление нефинансовых активов"
+        ]
+    elif id_dia == 9:
+        name = [
+            "Внут. затраты на внедр. и испол. цифр. тех. - собственные средства орг.",
+            "Внут. затраты на внедр. и испол. цифр. тех. - средства бюджет. всех уровней",
+            "Внут. затраты на внедр. и испол. цифр. тех. - прочие привлеч. средства",
+            "Прочие привлеч. средства: некоммерч. орг.",
+            "Прочие привлеч. средства: физических лиц"
+        ]
+    else:
+        name = ["Подали данные по форме N 85-К", 'Не подали данные']
+    return name
+
+
+def smart_diagram_value(id, id_dia):
+    if id == -1:
+        if id_dia == 2:
+            value1 = VR1.objects.select_related('r1').filter(r1="2", value=1).count()
+            value2 = VR1.objects.select_related('r1').filter(r1="2", value=2).count()
+            value = [value1, value2]
+        elif id_dia == 3:
+            value1 = VR2.objects.select_related('r2').filter(r2_id=1).aggregate(Sum("value"))
+            value2 = VR2.objects.select_related('r2').filter(r2_id=2).aggregate(Sum("value"))
+            value3 = VR2.objects.select_related('r2').filter(r2_id=3).aggregate(Sum("value"))
+            value4 = VR2.objects.select_related('r2').filter(r2_id=4).aggregate(Sum("value"))
+            value5 = VR2.objects.select_related('r2').filter(r2_id=5).aggregate(Sum("value"))
+            value = [
+                value1['value__sum'], value2['value__sum'], value3['value__sum'],
+                value4['value__sum'], value5['value__sum']
+            ]
+        elif id_dia == 4:
+            value2 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value2"))
+            value3 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value3"))
+            value4 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value4"))
+            value5 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value5"))
+            value6 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value6"))
+            value = [
+                value2['value2__sum'], value3['value3__sum'],
+                value4['value4__sum'], value5['value5__sum'], value6['value6__sum']
+            ]
+        elif id_dia == 5:
+            value1 = VR16.objects.select_related('r16').filter(r16_id=1, value1=1).count()
+            value2 = VR16.objects.select_related('r16').filter(r16_id=2, value1=1).count()
+            value3 = VR16.objects.select_related('r16').filter(r16_id=3, value1=1).count()
+            value4 = VR16.objects.select_related('r16').filter(r16_id=4, value1=1).count()
+            value5 = VR16.objects.select_related('r16').filter(r16_id=5, value1=1).count()
+            value6 = VR16.objects.select_related('r16').filter(r16_id=6, value1=1).count()
+            value7 = VR16.objects.select_related('r16').filter(r16_id=7, value1=1).count()
+            value8 = VR16.objects.select_related('r16').filter(r16_id=8, value1=1).count()
+            value9 = VR16.objects.select_related('r16').filter(r16_id=9, value1=1).count()
+            value10 = VR16.objects.select_related('r16').filter(r16_id=10, value1=1).count()
+            value11 = VR16.objects.select_related('r16').filter(r16_id=11, value1=1).count()
+            value12 = VR16.objects.select_related('r16').filter(r16_id=12, value1=1).count()
+            value13 = VR16.objects.select_related('r16').filter(r16_id=13, value1=1).count()
+            value14 = VR16.objects.select_related('r16').filter(r16_id=14, value1=1).count()
+            value15 = VR16.objects.select_related('r16').filter(r16_id=15, value1=1).count()
+            value16 = VR16.objects.select_related('r16').filter(r16_id=16, value1=1).count()
+            value17 = VR16.objects.select_related('r16').filter(r16_id=17, value1=1).count()
+            value18 = VR16.objects.select_related('r16').filter(r16_id=18, value1=1).count()
+            value19 = VR16.objects.select_related('r16').filter(r16_id=19, value1=1).count()
+            value20 = VR16.objects.select_related('r16').filter(r16_id=20, value1=1).count()
+            value21 = VR16.objects.select_related('r16').filter(r16_id=21, value1=1).count()
+            value = [
+                value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12,
+                value13, value14, value15, value16, value17, value18, value19, value20, value21
+            ]
+        elif id_dia == 6:
+            value1 = VR18.objects.select_related('r18').filter(r18_id=1, value1=1).count()
+            value2 = VR18.objects.select_related('r18').filter(r18_id=2, value1=1).count()
+            value3 = VR18.objects.select_related('r18').filter(r18_id=3, value1=1).count()
+            value4 = VR18.objects.select_related('r18').filter(r18_id=4, value1=1).count()
+            value5 = VR18.objects.select_related('r18').filter(r18_id=5, value1=1).count()
+            value6 = VR18.objects.select_related('r18').filter(r18_id=6, value1=1).count()
+            value7 = VR18.objects.select_related('r18').filter(r18_id=7, value1=1).count()
+            value8 = VR18.objects.select_related('r18').filter(r18_id=8, value1=1).count()
+            value9 = VR18.objects.select_related('r18').filter(r18_id=9, value1=1).count()
+            value10 = VR18.objects.select_related('r18').filter(r18_id=10, value1=1).count()
+            value11 = VR18.objects.select_related('r18').filter(r18_id=11, value1=1).count()
+            value = [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11]
+        elif id_dia == 7:
+            value1 = VR19.objects.select_related('r19').filter(r19_id=1, value1=1).count()
+            value2 = VR19.objects.select_related('r19').filter(r19_id=2, value1=1).count()
+            value3 = VR19.objects.select_related('r19').filter(r19_id=3, value1=1).count()
+            value4 = VR19.objects.select_related('r19').filter(r19_id=4, value1=1).count()
+            value5 = VR19.objects.select_related('r19').filter(r19_id=5, value1=1).count()
+            value6 = VR19.objects.select_related('r19').filter(r19_id=6, value1=1).count()
+            value7 = VR19.objects.select_related('r19').filter(r19_id=7, value1=1).count()
+            value8 = VR19.objects.select_related('r19').filter(r19_id=8, value1=1).count()
+            value = [
+                value1, value2, value3, value4, value5, value6, value7, value8]
+        elif id_dia == 8:
+            value2 = VR22.objects.select_related('r22').filter(r22_id=2).aggregate(Sum("value1"))
+            value3 = VR22.objects.select_related('r22').filter(r22_id=3).aggregate(Sum("value1"))
+            value4 = VR22.objects.select_related('r22').filter(r22_id=4).aggregate(Sum("value1"))
+            value5 = VR22.objects.select_related('r22').filter(r22_id=5).aggregate(Sum("value1"))
+            value6 = VR22.objects.select_related('r22').filter(r22_id=6).aggregate(Sum("value1"))
+            value = [
+                value2['value1__sum'], value3['value1__sum'],
+                value4['value1__sum'], value5['value1__sum'], value6['value1__sum']
+            ]
+        elif id_dia == 9:
+            value2 = VR25.objects.select_related('r25').filter(r25_id=2).aggregate(Sum("value1"))
+            value3 = VR25.objects.select_related('r25').filter(r25_id=3).aggregate(Sum("value1"))
+            value4 = VR25.objects.select_related('r25').filter(r25_id=4).aggregate(Sum("value1"))
+            value5 = VR25.objects.select_related('r25').filter(r25_id=5).aggregate(Sum("value1"))
+            value6 = VR25.objects.select_related('r25').filter(r25_id=6).aggregate(Sum("value1"))
+            value = [
+                value2['value1__sum'], value3['value1__sum'],
+                value4['value1__sum'], value5['value1__sum'], value6['value1__sum']
+            ]
+        else:
+            value2 = Builds.objects.filter(link='docs/default/template.xlsx').count()
+            b = Builds.objects.count()
+            value1 = b - value2
+            value = [value1, value2]
+    elif id == 0:
+        if id_dia == 2:
+            value1 = 0
+            value2 = 0
+            for n in range(8, 14):
+                value1 += VR1.objects.select_related('r1').filter(r1="2", value=1, doc__build__id_reg=n).count()
+                value2 += VR1.objects.select_related('r1').filter(r1="2", value=2, doc__build__id_reg=n).count()
+            value = [value1, value2]
+        elif id_dia == 3:
+            value1 = 0
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            for n in range(8, 14):
+                value1n = VR2.objects.select_related('r2').filter(r2_id=1, doc__build__id_reg=n).aggregate(Sum("value"))
+                value2n = VR2.objects.select_related('r2').filter(r2_id=2, doc__build__id_reg=n).aggregate(Sum("value"))
+                value3n = VR2.objects.select_related('r2').filter(r2_id=3, doc__build__id_reg=n).aggregate(Sum("value"))
+                value4n = VR2.objects.select_related('r2').filter(r2_id=4, doc__build__id_reg=n).aggregate(Sum("value"))
+                value5n = VR2.objects.select_related('r2').filter(r2_id=5, doc__build__id_reg=n).aggregate(Sum("value"))
+                if value1n['value__sum'] is None:
+                    value1 += 0
+                else:
+                    value1 += value1n['value__sum']
+                if value2n['value__sum'] is None:
+                    value2 += 0
+                else:
+                    value2 += value2n['value__sum']
+
+                if value3n['value__sum'] is None:
+                    value3 += 0
+                else:
+                    value3 += value3n['value__sum']
+                if value4n['value__sum'] is None:
+                    value4 += 0
+                else:
+                    value4 += value4n['value__sum']
+                if value5n['value__sum'] is None:
+                    value5 += 0
+                else:
+                    value5 += value5n['value__sum']
+            value = [value1, value2, value3, value4, value5]
+        elif id_dia == 4:
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            value6 = 0
+            for n in range(8, 14):
+                value2n = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=n).aggregate(
+                    Sum("value2"))
+                value3n = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=n).aggregate(
+                    Sum("value3"))
+                value4n = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=n).aggregate(
+                    Sum("value4"))
+                value5n = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=n).aggregate(
+                    Sum("value5"))
+                value6n = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=n).aggregate(
+                    Sum("value6"))
+                if value2n['value2__sum'] is None:
+                    value2 += 0
+                else:
+                    value2 += value2n['value2__sum']
+                if value3n['value3__sum'] is None:
+                    value3 += 0
+                else:
+                    value3 += value3n['value3__sum']
+                if value4n['value4__sum'] is None:
+                    value4 += 0
+                else:
+                    value4 += value4n['value4__sum']
+                if value5n['value5__sum'] is None:
+                    value5 += 0
+                else:
+                    value5 += value5n['value5__sum']
+                if value6n['value6__sum'] is None:
+                    value6 += 0
+                else:
+                    value6 += value6n['value6__sum']
+            value = [value2, value3, value4, value5, value6]
+        elif id_dia == 5:
+            value1 = 0
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            value6 = 0
+            value7 = 0
+            value8 = 0
+            value9 = 0
+            value10 = 0
+            value11 = 0
+            value12 = 0
+            value13 = 0
+            value14 = 0
+            value15 = 0
+            value16 = 0
+            value17 = 0
+            value18 = 0
+            value19 = 0
+            value20 = 0
+            value21 = 0
+            for n in range(8, 14):
+                value1 += VR16.objects.select_related('r16').filter(r16_id=1, value1=1, doc__build__id_reg=n).count()
+                value2 += VR16.objects.select_related('r16').filter(r16_id=2, value1=1, doc__build__id_reg=n).count()
+                value3 += VR16.objects.select_related('r16').filter(r16_id=3, value1=1, doc__build__id_reg=n).count()
+                value4 += VR16.objects.select_related('r16').filter(r16_id=4, value1=1, doc__build__id_reg=n).count()
+                value5 += VR16.objects.select_related('r16').filter(r16_id=5, value1=1, doc__build__id_reg=n).count()
+                value6 += VR16.objects.select_related('r16').filter(r16_id=6, value1=1, doc__build__id_reg=n).count()
+                value7 += VR16.objects.select_related('r16').filter(r16_id=7, value1=1, doc__build__id_reg=n).count()
+                value8 += VR16.objects.select_related('r16').filter(r16_id=8, value1=1, doc__build__id_reg=n).count()
+                value9 += VR16.objects.select_related('r16').filter(r16_id=9, value1=1, doc__build__id_reg=n).count()
+                value10 += VR16.objects.select_related('r16').filter(r16_id=10, value1=1, doc__build__id_reg=n).count()
+                value11 += VR16.objects.select_related('r16').filter(r16_id=11, value1=1, doc__build__id_reg=n).count()
+                value12 += VR16.objects.select_related('r16').filter(r16_id=12, value1=1, doc__build__id_reg=n).count()
+                value13 += VR16.objects.select_related('r16').filter(r16_id=13, value1=1, doc__build__id_reg=n).count()
+                value14 += VR16.objects.select_related('r16').filter(r16_id=14, value1=1, doc__build__id_reg=n).count()
+                value15 += VR16.objects.select_related('r16').filter(r16_id=15, value1=1, doc__build__id_reg=n).count()
+                value16 += VR16.objects.select_related('r16').filter(r16_id=16, value1=1, doc__build__id_reg=n).count()
+                value17 += VR16.objects.select_related('r16').filter(r16_id=17, value1=1, doc__build__id_reg=n).count()
+                value18 += VR16.objects.select_related('r16').filter(r16_id=18, value1=1, doc__build__id_reg=n).count()
+                value19 += VR16.objects.select_related('r16').filter(r16_id=19, value1=1, doc__build__id_reg=n).count()
+                value20 += VR16.objects.select_related('r16').filter(r16_id=20, value1=1, doc__build__id_reg=n).count()
+                value21 += VR16.objects.select_related('r16').filter(r16_id=21, value1=1, doc__build__id_reg=n).count()
+            value = [
+                value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12,
+                value13,
+                value14, value15, value16, value17, value18, value19, value20, value21
+            ]
+        elif id_dia == 6:
+            value1 = 0
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            value6 = 0
+            value7 = 0
+            value8 = 0
+            value9 = 0
+            value10 = 0
+            value11 = 0
+            for n in range(8, 14):
+                value1 += VR18.objects.select_related('r18').filter(r18_id=1, value1=1, doc__build__id_reg=n).count()
+                value2 += VR18.objects.select_related('r18').filter(r18_id=2, value1=1, doc__build__id_reg=n).count()
+                value3 += VR18.objects.select_related('r18').filter(r18_id=3, value1=1, doc__build__id_reg=n).count()
+                value4 += VR18.objects.select_related('r18').filter(r18_id=4, value1=1, doc__build__id_reg=n).count()
+                value5 += VR18.objects.select_related('r18').filter(r18_id=5, value1=1, doc__build__id_reg=n).count()
+                value6 += VR18.objects.select_related('r18').filter(r18_id=6, value1=1, doc__build__id_reg=n).count()
+                value7 += VR18.objects.select_related('r18').filter(r18_id=7, value1=1, doc__build__id_reg=n).count()
+                value8 += VR18.objects.select_related('r18').filter(r18_id=8, value1=1, doc__build__id_reg=n).count()
+                value9 += VR18.objects.select_related('r18').filter(r18_id=9, value1=1, doc__build__id_reg=n).count()
+                value10 += VR18.objects.select_related('r18').filter(r18_id=10, value1=1, doc__build__id_reg=n).count()
+                value11 += VR18.objects.select_related('r18').filter(r18_id=11, value1=1, doc__build__id_reg=n).count()
+            value = [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11]
+        elif id_dia == 7:
+            value1 = 0
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            value6 = 0
+            value7 = 0
+            value8 = 0
+            for n in range(8, 14):
+                value1 += VR19.objects.select_related('r19').filter(r19_id=1, value1=1, doc__build__id_reg=n).count()
+                value2 += VR19.objects.select_related('r19').filter(r19_id=2, value1=1, doc__build__id_reg=n).count()
+                value3 += VR19.objects.select_related('r19').filter(r19_id=3, value1=1, doc__build__id_reg=n).count()
+                value4 += VR19.objects.select_related('r19').filter(r19_id=4, value1=1, doc__build__id_reg=n).count()
+                value5 += VR19.objects.select_related('r19').filter(r19_id=5, value1=1, doc__build__id_reg=n).count()
+                value6 += VR19.objects.select_related('r19').filter(r19_id=6, value1=1, doc__build__id_reg=n).count()
+                value7 += VR19.objects.select_related('r19').filter(r19_id=7, value1=1, doc__build__id_reg=n).count()
+                value8 += VR19.objects.select_related('r19').filter(r19_id=8, value1=1, doc__build__id_reg=n).count()
+            value = [value1, value2, value3, value4, value5, value6, value7, value8]
+        elif id_dia == 8:
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            value6 = 0
+            for n in range(8, 14):
+                value2n = VR22.objects.select_related('r22').filter(r22_id=2, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value3n = VR22.objects.select_related('r22').filter(r22_id=3, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value4n = VR22.objects.select_related('r22').filter(r22_id=4, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value5n = VR22.objects.select_related('r22').filter(r22_id=5, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value6n = VR22.objects.select_related('r22').filter(r22_id=6, doc__build__id_reg=n).aggregate(Sum("value1"))
+                if value2n['value1__sum'] is None:
+                    value2 += 0
+                else:
+                    value2 += value2n['value1__sum']
+                if value3n['value1__sum'] is None:
+                    value3 += 0
+                else:
+                    value3 += value3n['value1__sum']
+                if value4n['value1__sum'] is None:
+                    value4 += 0
+                else:
+                    value4 += value4n['value1__sum']
+                if value5n['value1__sum'] is None:
+                    value5 += 0
+                else:
+                    value5 += value5n['value1__sum']
+                if value6n['value1__sum'] is None:
+                    value6 += 0
+                else:
+                    value6 += value6n['value1__sum']
+            value = [value2, value3, value4, value5, value6]
+        elif id_dia == 9:
+            value2 = 0
+            value3 = 0
+            value4 = 0
+            value5 = 0
+            value6 = 0
+            for n in range(8, 14):
+                value2n = VR25.objects.select_related('r25').filter(r25_id=2, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value3n = VR25.objects.select_related('r25').filter(r25_id=3, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value4n = VR25.objects.select_related('r25').filter(r25_id=4, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value5n = VR25.objects.select_related('r25').filter(r25_id=5, doc__build__id_reg=n).aggregate(Sum("value1"))
+                value6n = VR25.objects.select_related('r25').filter(r25_id=6, doc__build__id_reg=n).aggregate(Sum("value1"))
+                if value2n['value1__sum'] is None:
+                    value2 += 0
+                else:
+                    value2 += value2n['value1__sum']
+                if value3n['value1__sum'] is None:
+                    value3 += 0
+                else:
+                    value3 += value3n['value1__sum']
+                if value4n['value1__sum'] is None:
+                    value4 += 0
+                else:
+                    value4 += value4n['value1__sum']
+                if value5n['value1__sum'] is None:
+                    value5 += 0
+                else:
+                    value5 += value5n['value1__sum']
+                if value6n['value1__sum'] is None:
+                    value6 += 0
+                else:
+                    value6 += value6n['value1__sum']
+            value = [value2, value3, value4, value5, value6]
+        else:
+            value2 = 0
+            b = 0
+            for n in range(8, 14):
+                value2 += Builds.objects.filter(link='docs/default/template.xlsx', id_reg=n).count()
+                b += Builds.objects.filter(id_reg=n).count()
+            value1 = b - value2
+            value = [value1, value2]
+    else:
+        if id_dia == 2:
+            value1 = VR1.objects.select_related('r1').filter(r1="2", value=1, doc__build__id_reg=id).count()
+            value2 = VR1.objects.select_related('r1').filter(r1="2", value=2, doc__build__id_reg=id).count()
+            value = [value1, value2]
+        elif id_dia == 3:
+            value1 = VR2.objects.select_related('r2').filter(r2_id=1, doc__build__id_reg=id).aggregate(Sum("value"))
+            value2 = VR2.objects.select_related('r2').filter(r2_id=2, doc__build__id_reg=id).aggregate(Sum("value"))
+            value3 = VR2.objects.select_related('r2').filter(r2_id=3, doc__build__id_reg=id).aggregate(Sum("value"))
+            value4 = VR2.objects.select_related('r2').filter(r2_id=4, doc__build__id_reg=id).aggregate(Sum("value"))
+            value5 = VR2.objects.select_related('r2').filter(r2_id=5, doc__build__id_reg=id).aggregate(Sum("value"))
+            if value1['value__sum'] is None:
+                value1 = 0
+            else:
+                value1 = value1['value__sum']
+            if value2['value__sum'] is None:
+                value2 = 0
+            else:
+                value2 = value2['value__sum']
+            if value3['value__sum'] is None:
+                value3 = 0
+            else:
+                value3 = value3['value__sum']
+            if value4['value__sum'] is None:
+                value4 = 0
+            else:
+                value4 = value4['value__sum']
+            if value5['value__sum'] is None:
+                value5 = 0
+            else:
+                value5 = value5['value__sum']
+            value = [value1, value2, value3, value4, value5]
+        elif id_dia == 4:
+            value2 = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=id).aggregate(Sum("value2"))
+            value3 = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=id).aggregate(Sum("value3"))
+            value4 = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=id).aggregate(Sum("value4"))
+            value5 = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=id).aggregate(Sum("value5"))
+            value6 = VR9.objects.select_related('r9').filter(r9_id=1, doc__build__id_reg=id).aggregate(Sum("value6"))
+            if value2['value2__sum'] is None:
+                value2 = 0
+            else:
+                value2 = value2['value2__sum']
+            if value3['value3__sum'] is None:
+                value3 = 0
+            else:
+                value3 = value3['value3__sum']
+            if value4['value4__sum'] is None:
+                value4 = 0
+            else:
+                value4 = value4['value4__sum']
+            if value5['value5__sum'] is None:
+                value5 = 0
+            else:
+                value5 = value5['value5__sum']
+            if value6['value6__sum'] is None:
+                value6 = 0
+            else:
+                value6 = value6['value6__sum']
+            value = [value2, value3, value4, value5, value6]
+        elif id_dia == 5:
+            value1 = VR16.objects.select_related('r16').filter(r16_id=1, value1=1, doc__build__id_reg=id).count()
+            value2 = VR16.objects.select_related('r16').filter(r16_id=2, value1=1, doc__build__id_reg=id).count()
+            value3 = VR16.objects.select_related('r16').filter(r16_id=3, value1=1, doc__build__id_reg=id).count()
+            value4 = VR16.objects.select_related('r16').filter(r16_id=4, value1=1, doc__build__id_reg=id).count()
+            value5 = VR16.objects.select_related('r16').filter(r16_id=5, value1=1, doc__build__id_reg=id).count()
+            value6 = VR16.objects.select_related('r16').filter(r16_id=6, value1=1, doc__build__id_reg=id).count()
+            value7 = VR16.objects.select_related('r16').filter(r16_id=7, value1=1, doc__build__id_reg=id).count()
+            value8 = VR16.objects.select_related('r16').filter(r16_id=8, value1=1, doc__build__id_reg=id).count()
+            value9 = VR16.objects.select_related('r16').filter(r16_id=9, value1=1, doc__build__id_reg=id).count()
+            value10 = VR16.objects.select_related('r16').filter(r16_id=10, value1=1, doc__build__id_reg=id).count()
+            value11 = VR16.objects.select_related('r16').filter(r16_id=11, value1=1, doc__build__id_reg=id).count()
+            value12 = VR16.objects.select_related('r16').filter(r16_id=12, value1=1, doc__build__id_reg=id).count()
+            value13 = VR16.objects.select_related('r16').filter(r16_id=13, value1=1, doc__build__id_reg=id).count()
+            value14 = VR16.objects.select_related('r16').filter(r16_id=14, value1=1, doc__build__id_reg=id).count()
+            value15 = VR16.objects.select_related('r16').filter(r16_id=15, value1=1, doc__build__id_reg=id).count()
+            value16 = VR16.objects.select_related('r16').filter(r16_id=16, value1=1, doc__build__id_reg=id).count()
+            value17 = VR16.objects.select_related('r16').filter(r16_id=17, value1=1, doc__build__id_reg=id).count()
+            value18 = VR16.objects.select_related('r16').filter(r16_id=18, value1=1, doc__build__id_reg=id).count()
+            value19 = VR16.objects.select_related('r16').filter(r16_id=19, value1=1, doc__build__id_reg=id).count()
+            value20 = VR16.objects.select_related('r16').filter(r16_id=20, value1=1, doc__build__id_reg=id).count()
+            value21 = VR16.objects.select_related('r16').filter(r16_id=21, value1=1, doc__build__id_reg=id).count()
+            value = [
+                value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12,
+                value13, value14, value15, value16, value17, value18, value19, value20, value21
+            ]
+        elif id_dia == 6:
+            value1 = VR18.objects.select_related('r18').filter(r18_id=1, value1=1, doc__build__id_reg=id).count()
+            value2 = VR18.objects.select_related('r18').filter(r18_id=2, value1=1, doc__build__id_reg=id).count()
+            value3 = VR18.objects.select_related('r18').filter(r18_id=3, value1=1, doc__build__id_reg=id).count()
+            value4 = VR18.objects.select_related('r18').filter(r18_id=4, value1=1, doc__build__id_reg=id).count()
+            value5 = VR18.objects.select_related('r18').filter(r18_id=5, value1=1, doc__build__id_reg=id).count()
+            value6 = VR18.objects.select_related('r18').filter(r18_id=6, value1=1, doc__build__id_reg=id).count()
+            value7 = VR18.objects.select_related('r18').filter(r18_id=7, value1=1, doc__build__id_reg=id).count()
+            value8 = VR18.objects.select_related('r18').filter(r18_id=8, value1=1, doc__build__id_reg=id).count()
+            value9 = VR18.objects.select_related('r18').filter(r18_id=9, value1=1, doc__build__id_reg=id).count()
+            value10 = VR18.objects.select_related('r18').filter(r18_id=10, value1=1, doc__build__id_reg=id).count()
+            value11 = VR18.objects.select_related('r18').filter(r18_id=11, value1=1, doc__build__id_reg=id).count()
+            value = [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11]
+        elif id_dia == 7:
+            value1 = VR19.objects.select_related('r19').filter(r19_id=1, value1=1, doc__build__id_reg=id).count()
+            value2 = VR19.objects.select_related('r19').filter(r19_id=2, value1=1, doc__build__id_reg=id).count()
+            value3 = VR19.objects.select_related('r19').filter(r19_id=3, value1=1, doc__build__id_reg=id).count()
+            value4 = VR19.objects.select_related('r19').filter(r19_id=4, value1=1, doc__build__id_reg=id).count()
+            value5 = VR19.objects.select_related('r19').filter(r19_id=5, value1=1, doc__build__id_reg=id).count()
+            value6 = VR19.objects.select_related('r19').filter(r19_id=6, value1=1, doc__build__id_reg=id).count()
+            value7 = VR19.objects.select_related('r19').filter(r19_id=7, value1=1, doc__build__id_reg=id).count()
+            value8 = VR19.objects.select_related('r19').filter(r19_id=8, value1=1, doc__build__id_reg=id).count()
+            value = [value1, value2, value3, value4, value5, value6, value7, value8]
+        elif id_dia == 8:
+            value2 = VR22.objects.select_related('r22').filter(r22_id=2, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value3 = VR22.objects.select_related('r22').filter(r22_id=3, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value4 = VR22.objects.select_related('r22').filter(r22_id=4, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value5 = VR22.objects.select_related('r22').filter(r22_id=5, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value6 = VR22.objects.select_related('r22').filter(r22_id=6, doc__build__id_reg=id).aggregate(Sum("value1"))
+            if value2['value1__sum'] is None:
+                value2 = 0
+            else:
+                value2 = value2['value1__sum']
+            if value3['value1__sum'] is None:
+                value3 = 0
+            else:
+                value3 = value3['value1__sum']
+            if value4['value1__sum'] is None:
+                value4 = 0
+            else:
+                value4 = value4['value1__sum']
+            if value5['value1__sum'] is None:
+                value5 = 0
+            else:
+                value5 = value5['value1__sum']
+            if value6['value1__sum'] is None:
+                value6 = 0
+            else:
+                value6 = value6['value1__sum']
+            value = [value2, value3, value4, value5, value6]
+        elif id_dia == 9:
+            value2 = VR25.objects.select_related('r25').filter(r25_id=2, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value3 = VR25.objects.select_related('r25').filter(r25_id=3, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value4 = VR25.objects.select_related('r25').filter(r25_id=4, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value5 = VR25.objects.select_related('r25').filter(r25_id=5, doc__build__id_reg=id).aggregate(Sum("value1"))
+            value6 = VR25.objects.select_related('r25').filter(r25_id=6, doc__build__id_reg=id).aggregate(Sum("value1"))
+            if value2['value1__sum'] is None:
+                value2 = 0
+            else:
+                value2 = value2['value1__sum']
+            if value3['value1__sum'] is None:
+                value3 = 0
+            else:
+                value3 = value3['value1__sum']
+            if value4['value1__sum'] is None:
+                value4 = 0
+            else:
+                value4 = value4['value1__sum']
+            if value5['value1__sum'] is None:
+                value5 = 0
+            else:
+                value5 = value5['value1__sum']
+            if value6['value1__sum'] is None:
+                value6 = 0
+            else:
+                value6 = value6['value1__sum']
+            value = [value2, value3, value4, value5, value6]
+        else:
+            value2 = Builds.objects.filter(link='docs/default/template.xlsx', id_reg=id).count()
+            b = Builds.objects.filter(id_reg=id).count()
+            value1 = b - value2
+            value = [value1, value2]
+    return value
+
+
+def home(request):
+    card_data = smart_card(-1)
+    q = request.GET.get('q')
+    if (q is None) or (q == ''):
+        q = 1
+    else:
+        q = int(q)
+    name = smart_diagram_name(q)
+    value = smart_diagram_value(-1, q)
+    text_for_diagram = text_diagram()
+    context = {'card_data': card_data, 'name': name, 'value': value, 'q': q, 'text_for_diagram': text_for_diagram}
+    return render(request, 'blog/home.html', context)
+
+
+def about(request):
+    # builds = Builds.objects.filter(id_reg=1)
+    #
+    # for build in builds:
+    #     print(build)
+    #     buildoc = BuildDocs()
+    #     buildoc.build = build
+    #     buildoc.user = request.user
+    #     buildoc.save()
+    return render(request, 'blog/about.html', {'title': 'Добавить информацию'})
+
+
+def info(request, id):
+    query = request.GET.get('q')
+    if query is None:
+        query = ''
+
+    d = request.GET.get('d')
+    if (d is None) or (d == ''):
+        d = 1
+    else:
+        d = int(d)
+    text_for_diagram = text_diagram()
+    name = smart_diagram_name(d)
+    value = smart_diagram_value(id, d)
+    card_data = smart_card(id)
+
+    if id == 0:
         flag = False
         text8 = Regions.objects.get(id=8)
         text9 = Regions.objects.get(id=9)
@@ -134,19 +859,37 @@ def info(request, id):
                 Q(id_reg=13) &
                 (Q(id__icontains=query) | Q(name__icontains=query))
             ).order_by('id')
+        text = {
+            "name": 'Воронеж'
+        }
+        builds_title = [
+            text8.name,
+            text9.name,
+            text10.name,
+            text11.name,
+            text12.name,
+            text13.name
+        ]
+        builds_data = [
+            build8,
+            build9,
+            build10,
+            build11,
+            build12,
+            build13
+        ]
+        diagram_data = [
+            name,
+            value
+        ]
         context = {
-            'build8': build8, 'build9': build9, 'build10': build10, 'build11': build11, 'build12': build12,
-            'build13': build13, 'text8': text8, 'text9': text9, 'text10': text10, 'text11': text11, 'text12': text12,
-            'text13': text13, 'flag': flag, 'id_info': id, 'count_build': count_build, 'count_workers': count_workers,
-            'count_students': count_students
+            'builds_data': builds_data, 'builds_title': builds_title, 'text': text, 'flag': flag, 'id_info': id,
+            'card_data': card_data, 'diagram_data': diagram_data, 'd': d, 'query': query, 'text_for_diagram': text_for_diagram
         }
         return render(request, 'blog/builds.html', context)
     else:
         flag = True
         text = Regions.objects.get(id=id)
-        count_build = Builds.objects.filter(id_reg=id).count()
-        count_workers = Builds.objects.filter(id_reg=id).aggregate(Sum("workers"))
-        count_students = Builds.objects.filter(id_reg=id).aggregate(Sum("students"))
         if query is None:
             builds = Builds.objects.filter(id_reg=id)
         else:
@@ -154,9 +897,14 @@ def info(request, id):
                 Q(id_reg=id) &
                 (Q(id__icontains=query) | Q(name__icontains=query))
             ).order_by('id')
+
+        diagram_data = [
+            name,
+            value
+        ]
         context = {
-            'builds': builds, 'text': text, 'flag': flag, 'id_info': id, 'count_build': count_build,
-            'count_workers': count_workers, 'count_students': count_students
+            'builds': builds, 'text': text, 'flag': flag, 'id_info': id, 'card_data': card_data,
+            'diagram_data': diagram_data, 'd': d, 'query': query, 'text_for_diagram': text_for_diagram
         }
         return render(request, 'blog/builds.html', context)
 
@@ -281,6 +1029,8 @@ def vr(request, id_build, id):
 @login_required
 def lk(request):
     query = request.GET.get('q')
+    if query is None:
+        query = ""
     if request.user.username == 'admin':
         if query is None:
             buildsuser = BuildDocs.objects.select_related('build').all().order_by('build_id')
@@ -296,7 +1046,41 @@ def lk(request):
                 Q(user=request.user) &
                 (Q(build__id__icontains=query) | Q(build__name__icontains=query))
             ).order_by('build_id')
-    context = {'builds': buildsuser}
+
+    v_data = [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50
+    ]
+
+    default_page = 1
+    page = request.GET.get('page', default_page)
+
+    v = request.GET.get('v')
+    if (v is None) or (v == ''):
+        v = 10
+    else:
+        v = int(v)
+
+    # Paginate items
+    items_per_page = v
+    paginator = Paginator(buildsuser, items_per_page)
+
+    try:
+        items_page = paginator.page(page)
+    except PageNotAnInteger:
+        items_page = paginator.page(default_page)
+    except EmptyPage:
+        items_page = paginator.page(paginator.num_pages)
+
+    context = {'builds': buildsuser, 'query': query, "items_page": items_page, 'v': v, 'v_data': v_data}
     return render(request, 'blog/lk.html', context)
 
 
@@ -338,6 +1122,11 @@ def userprofile(request):
 def filter(request):
     regions = request.GET.getlist('regions[]')
     vr = request.GET.get('VR')
+
+    query = request.GET.get('q')
+    if query is None:
+        query = ""
+
     title = None
     if (vr is None) or (vr == ''):
         vr = 0
@@ -347,14 +1136,44 @@ def filter(request):
 
     data = []
     namebuilds = []
-    builds = []
+
 
     if (not regions) or (regions == ''):
-        builds.append(BuildDocs.objects.select_related('build').all().order_by('build_id'))
+        if (query is None) or (query == ''):
+            try:
+                builds.union(BuildDocs.objects.select_related('build').all().order_by('build_id'))
+            except NameError:
+                builds = BuildDocs.objects.select_related('build').all().order_by('build_id')
+        else:
+            try:
+                builds.union(BuildDocs.objects.select_related('build').filter(
+                    Q(build__id__icontains=query) | Q(build__name__icontains=query)
+                ).order_by('build_id'))
+            except NameError:
+                builds = BuildDocs.objects.select_related('build').filter(
+                    Q(build__id__icontains=query) | Q(build__name__icontains=query)
+                ).order_by('build_id')
     else:
-        for region in regions:
-            r = int(region)
-            builds.append(BuildDocs.objects.select_related('build').filter(build__id_reg=r).order_by('build_id'))
+        if (query is None) or (query == ''):
+            for region in regions:
+                r = int(region)
+                try:
+                    builds.union(BuildDocs.objects.select_related('build').filter(build__id_reg=r).order_by('build_id'))
+                except NameError:
+                    builds = BuildDocs.objects.select_related('build').filter(build__id_reg=r).order_by('build_id')
+        else:
+            for region in regions:
+                r = int(region)
+                try:
+                    builds.union(BuildDocs.objects.select_related('build').filter(
+                        Q(build__id_reg=r) &
+                        (Q(build__id__icontains=query) | Q(build__name__icontains=query))
+                    ).order_by('build_id'))
+                except NameError:
+                    builds = BuildDocs.objects.select_related('build').filter(
+                        Q(build__id_reg=r) &
+                        (Q(build__id__icontains=query) | Q(build__name__icontains=query))
+                    ).order_by('build_id')
 
     if not buildinfo:
         flag = 0
@@ -493,9 +1312,296 @@ def filter(request):
             namebuilds.append(Builds.objects.get(pk=d))
     region = Regions.objects.all()
 
-    context = {'builds': builds, 'flag': flag, 'data': data, 'title': title, 'id': vr, 'region': region,
-               'nameb': namebuilds}
+    test = []
+    for r in regions:
+        test.append(int(r))
+    regions = test
+
+    data_filter = [
+        [0, 'Общие сведения'],
+        [1, 'Раздел 1'],
+        [2, 'Раздел 2'],
+        [3, 'Раздел 3'],
+        [4, 'Раздел 4'],
+        [5, 'Раздел 5'],
+        [6, 'Раздел 6'],
+        [7, 'Раздел 7'],
+        [8, 'Раздел 8'],
+        [9, 'Раздел 9'],
+        [10, 'Раздел 10'],
+        [11, 'Раздел 11'],
+        [12, 'Раздел 12'],
+        [13, 'Раздел 13'],
+        [14, 'Раздел 14'],
+        [15, 'Раздел 15'],
+        [16, 'Раздел 16'],
+        [17, 'Раздел 17'],
+        [18, 'Раздел 18'],
+        [19, 'Раздел 19'],
+        [20, 'Раздел 20'],
+        [21, 'Раздел 21'],
+        [22, 'Раздел 22'],
+        [23, 'Раздел 23'],
+        [24, 'Раздел 24'],
+        [25, 'Раздел 25']
+    ]
+
+    v_data = [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50
+    ]
+
+    default_page = 1
+    page = request.GET.get('page', default_page)
+
+    v = request.GET.get('v')
+    if (v is None) or (v == ''):
+        v = 10
+    else:
+        v = int(v)
+
+    # Paginate items
+    items_per_page = v
+    paginator = Paginator(builds, items_per_page)
+
+    try:
+        items_page = paginator.page(page)
+    except PageNotAnInteger:
+        items_page = paginator.page(default_page)
+    except EmptyPage:
+        items_page = paginator.page(paginator.num_pages)
+
+    st = ""
+    for r in regions:
+        st = st + 'regions[]=' + str(r) + '&'
+
+
+
+    context = {
+        'builds': builds, 'flag': flag, 'data': data, 'title': title, 'id': vr, 'region': region, 'nameb': namebuilds,
+        'regions': regions, 'data_filter': data_filter, 'vr': vr, 'query': query, "items_page": items_page, 'str': st,
+        'v': v, 'v_data': v_data
+    }
     return render(request, 'blog/filter.html', context)
+
+
+def diagram(request):
+
+    q = request.GET.get('q')
+    if (q is None) or (q == ''):
+        q = 0
+    q = int(q)
+
+    if q == 2:
+        name = [
+            "Городская местность",
+            "Сельская местность"
+        ]
+        value1 = VR1.objects.select_related('r1').filter(r1="1", value=1).count()
+        value2 = VR1.objects.select_related('r1').filter(r1="2", value=2).count()
+
+        value = [value1, value2]
+
+    elif q == 3:
+        name = [
+            "Численность воспитанников кратковременного пребывания (5 часов и менее)",
+            "Численность воспитанников сокращенного дня (8 - 10 часов)",
+            "Численность воспитанников полного дня (10,5 - 12 часов)",
+            "Численность воспитанников продленного дня (13 - 14 часов)",
+            "Численность воспитанников"
+        ]
+        value1 = VR2.objects.select_related('r2').filter(r2_id=1).aggregate(Sum("value"))
+        value2 = VR2.objects.select_related('r2').filter(r2_id=2).aggregate(Sum("value"))
+        value3 = VR2.objects.select_related('r2').filter(r2_id=3).aggregate(Sum("value"))
+        value4 = VR2.objects.select_related('r2').filter(r2_id=4).aggregate(Sum("value"))
+        value5 = VR2.objects.select_related('r2').filter(r2_id=5).aggregate(Sum("value"))
+
+        value = [
+            value1['value__sum'], value2['value__sum'], value3['value__sum'],
+            value4['value__sum'], value5['value__sum']
+        ]
+
+    elif q == 4:
+        name = [
+            "Всего работников",
+            "Из всех работников имеют высшее образование",
+            "Высшее педагогическое образование",
+            "Сред. проф. образование по программам подготовки специалистов среднего звена",
+            "Сред. проф. педагогическое образование по программам подготовки специалистов среднего звена",
+            "Из всех работников всего женщин"
+        ]
+        value1 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value1"))
+        value2 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value2"))
+        value3 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value3"))
+        value4 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value4"))
+        value5 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value5"))
+        value6 = VR9.objects.select_related('r9').filter(r9_id=1).aggregate(Sum("value6"))
+
+        value = [
+            value1['value1__sum'], value2['value2__sum'], value3['value3__sum'],
+            value4['value4__sum'], value5['value5__sum'], value6['value6__sum']
+        ]
+
+    elif q == 5:
+        name = [
+            "Кабинет заведующего",
+            "Групповые комнаты",
+            "Спальни",
+            "Соляная комната/пещера",
+            "Комнаты для специалистов",
+            "Медицинский кабинет",
+            "Изолятор",
+            "Процедурный кабинет",
+            "Методический кабинет",
+            "Физкультурный/спортивный зал",
+            "Музыкальный зал",
+            "Плавательный бассейн",
+            "Зимний сад/экологическая комната",
+            "Подсобное помещение",
+            "Лаборатория",
+            "Места для личной гигиены",
+            "Раздевальная",
+            "Помещения для приготовления и раздачи пищи",
+            "Кинозал",
+            "Книгохранилище\библиотека",
+            "Фитобар"
+        ]
+        value1 = VR16.objects.select_related('r16').filter(r16_id=1, value1=1).count()
+        value2 = VR16.objects.select_related('r16').filter(r16_id=2, value1=1).count()
+        value3 = VR16.objects.select_related('r16').filter(r16_id=3, value1=1).count()
+        value4 = VR16.objects.select_related('r16').filter(r16_id=4, value1=1).count()
+        value5 = VR16.objects.select_related('r16').filter(r16_id=5, value1=1).count()
+        value6 = VR16.objects.select_related('r16').filter(r16_id=6, value1=1).count()
+        value7 = VR16.objects.select_related('r16').filter(r16_id=7, value1=1).count()
+        value8 = VR16.objects.select_related('r16').filter(r16_id=8, value1=1).count()
+        value9 = VR16.objects.select_related('r16').filter(r16_id=9, value1=1).count()
+        value10 = VR16.objects.select_related('r16').filter(r16_id=10, value1=1).count()
+        value11 = VR16.objects.select_related('r16').filter(r16_id=11, value1=1).count()
+        value12 = VR16.objects.select_related('r16').filter(r16_id=12, value1=1).count()
+        value13 = VR16.objects.select_related('r16').filter(r16_id=13, value1=1).count()
+        value14 = VR16.objects.select_related('r16').filter(r16_id=14, value1=1).count()
+        value15 = VR16.objects.select_related('r16').filter(r16_id=15, value1=1).count()
+        value16 = VR16.objects.select_related('r16').filter(r16_id=16, value1=1).count()
+        value17 = VR16.objects.select_related('r16').filter(r16_id=17, value1=1).count()
+        value18 = VR16.objects.select_related('r16').filter(r16_id=18, value1=1).count()
+        value19 = VR16.objects.select_related('r16').filter(r16_id=19, value1=1).count()
+        value20 = VR16.objects.select_related('r16').filter(r16_id=20, value1=1).count()
+        value21 = VR16.objects.select_related('r16').filter(r16_id=21, value1=1).count()
+
+        value = [
+            value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12, value13,
+            value14, value15, value16, value17, value18, value19, value20, value21
+        ]
+
+    elif q == 6:
+        name = [
+            "интерактивной доски, ин. стола, демонстр. экрана с мультимед. проектором",
+            "цифрового/интерактивного пола",
+            "бизибордов",
+            "стола для рисования в технике Эбру",
+            "сухого бассейна",
+            "светового стола для рисования песком",
+            "печатных книг/журналов для чтения воспитанниками",
+            "электронные средства обучения",
+            "магнитных досок",
+            "скалодрома",
+            "батута"
+        ]
+        value1 = VR18.objects.select_related('r18').filter(r18_id=1, value1=1).count()
+        value2 = VR18.objects.select_related('r18').filter(r18_id=2, value1=1).count()
+        value3 = VR18.objects.select_related('r18').filter(r18_id=3, value1=1).count()
+        value4 = VR18.objects.select_related('r18').filter(r18_id=4, value1=1).count()
+        value5 = VR18.objects.select_related('r18').filter(r18_id=5, value1=1).count()
+        value6 = VR18.objects.select_related('r18').filter(r18_id=6, value1=1).count()
+        value7 = VR18.objects.select_related('r18').filter(r18_id=7, value1=1).count()
+        value8 = VR18.objects.select_related('r18').filter(r18_id=8, value1=1).count()
+        value9 = VR18.objects.select_related('r18').filter(r18_id=9, value1=1).count()
+        value10 = VR18.objects.select_related('r18').filter(r18_id=10, value1=1).count()
+        value11 = VR18.objects.select_related('r18').filter(r18_id=11, value1=1).count()
+
+        value = [
+            value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11]
+
+    elif q == 7:
+        name = [
+            "пандуса",
+            "подъемника для детей",
+            "лифта для детей",
+            "инвалидных колясок",
+            "книг для слабовидящих",
+            "электронных обучающих материалов (игр и презентаций)",
+            "стационарного спортивного оборудования (тренажеров)",
+            "звуковые средства воспроизведения информации"
+        ]
+        value1 = VR19.objects.select_related('r19').filter(r19_id=1, value1=1).count()
+        value2 = VR19.objects.select_related('r19').filter(r19_id=2, value1=1).count()
+        value3 = VR19.objects.select_related('r19').filter(r19_id=3, value1=1).count()
+        value4 = VR19.objects.select_related('r19').filter(r19_id=4, value1=1).count()
+        value5 = VR19.objects.select_related('r19').filter(r19_id=5, value1=1).count()
+        value6 = VR19.objects.select_related('r19').filter(r19_id=6, value1=1).count()
+        value7 = VR19.objects.select_related('r19').filter(r19_id=7, value1=1).count()
+        value8 = VR19.objects.select_related('r19').filter(r19_id=8, value1=1).count()
+
+        value = [
+            value1, value2, value3, value4, value5, value6, value7, value8]
+
+    elif q == 8:
+        name = [
+            "Расходы - всего",
+            "Расходы - оплата труда и начисления на выплаты по оплате труда",
+            "Расходы - оплата работ, услуг",
+            "Расходы - социальное обеспечение",
+            "Расходы - прочие расходы",
+            "Поступление нефинансовых активов"
+        ]
+        value1 = VR22.objects.select_related('r22').filter(r22_id=1).aggregate(Sum("value1"))
+        value2 = VR22.objects.select_related('r22').filter(r22_id=2).aggregate(Sum("value1"))
+        value3 = VR22.objects.select_related('r22').filter(r22_id=3).aggregate(Sum("value1"))
+        value4 = VR22.objects.select_related('r22').filter(r22_id=4).aggregate(Sum("value1"))
+        value5 = VR22.objects.select_related('r22').filter(r22_id=5).aggregate(Sum("value1"))
+        value6 = VR22.objects.select_related('r22').filter(r22_id=6).aggregate(Sum("value1"))
+
+        value = [
+            value1['value1__sum'], value2['value1__sum'], value3['value1__sum'],
+            value4['value1__sum'], value5['value1__sum'], value6['value1__sum']
+        ]
+    elif q == 9:
+        name = [
+            "Внут. затраты на внедр. и испол. цифр. тех. - всего",
+            "Внут. затраты на внедр. и испол. цифр. тех. - собственные средства орг.",
+            "Внут. затраты на внедр. и испол. цифр. тех. - средства бюджет. всех уровней",
+            "Внут. затраты на внедр. и испол. цифр. тех. - прочие привлеч. средства",
+            "Прочие привлеч. средства: некоммерч. орг.",
+            "Прочие привлеченные средства: физических лиц"
+        ]
+        value1 = VR25.objects.select_related('r25').filter(r25_id=1).aggregate(Sum("value1"))
+        value2 = VR25.objects.select_related('r25').filter(r25_id=2).aggregate(Sum("value1"))
+        value3 = VR25.objects.select_related('r25').filter(r25_id=3).aggregate(Sum("value1"))
+        value4 = VR25.objects.select_related('r25').filter(r25_id=4).aggregate(Sum("value1"))
+        value5 = VR25.objects.select_related('r25').filter(r25_id=5).aggregate(Sum("value1"))
+        value6 = VR25.objects.select_related('r25').filter(r25_id=6).aggregate(Sum("value1"))
+
+        value = [
+            value1['value1__sum'], value2['value1__sum'], value3['value1__sum'],
+            value4['value1__sum'], value5['value1__sum'], value6['value1__sum']
+        ]
+    else:
+        name = ["Подали данные по форме N 85-К", 'Не подали данные']
+        value1 = Builds.objects.filter(link='docs/default/template.xlsx').count()
+        b = Builds.objects.count()
+        value2 = b - value1
+        value = [value2, value1]
+    context = {'name': name, 'value': value, 'q': q}
+    return render(request, 'test/test_diagram.html', context)
+
 
 # def test(request):
 #     builds = Builds.objects.all()

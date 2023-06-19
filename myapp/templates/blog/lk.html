@@ -7,21 +7,81 @@
     <div class="media-body">
         <h1 align="center">Выберете организацию из предложенного списка</h1><br>
         <form action="{% url 'lk' %}" method="get">
+
+            <select class="form-select" name="v" style="text-align: center;">
+                {% for vs in v_data %}
+                    {% if vs == v %}
+                        <option value="{{vs}}" selected>Организаций на странице: {{vs}}</option>
+                    {% else %}
+                        <option value="{{vs}}">Организаций на странице: {{vs}}</option>
+                    {% endif %}
+                {%endfor%}
+            </select>
+
+            <br>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Применить фильтры</button>
+            </div>
+            <br><br>
+
             <div class="input-group">
                 <label for="search"></label>
-                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search">
+                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search" value = {{query}}>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-secondary"><i>{% bs_icon 'search' %}</i></button>
                 </div>
             </div>
-        </form>
-        <br><br>
+</form>
+        <br>
 
+{% if items_page %}
         <ul class="list-group">
-            {% for build in builds %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'redact_data' build.build.id %}" class="text-primary">{{build.build.id}}. {{build }}</a></li>
-            {% endfor %}
-        </ul>
+    {% for item in items_page %}
+
+
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'redact_data' item.build.id %}" class="text-primary">{{item.build.id}}. {{item }}</a></li>
+
+
+    {% endfor %}
+
+ </ul>
+
+    {% if items_page.has_other_pages %}
+
+        <br><br>
+        <div class="text-center">
+    <div class="btn-group text-center" role="group" aria-label="Item pagination" >
+        {% if items_page.has_previous %}
+            <a href="?page={{ items_page.previous_page_number }}&q={{query}}" class="btn btn-outline-primary">Предыдущая</a>
+        {% else %}
+            <a href="#" class="btn btn-outline-primary disabled">Предыдущая</a>
+        {% endif %}
+
+        {% for page_number in items_page.paginator.page_range %}
+            {% if items_page.number == page_number %}
+                <button class="btn btn-outline-primary active">
+                    <span>{{ page_number }} <span class="sr-only"></span></span>
+                </button>
+            {% else %}
+                <a href="?page={{ page_number }}&q={{query}}" class="btn btn-outline-primary">
+                    {{ page_number }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {% if items_page.has_next %}
+            <a href="?page={{ items_page.next_page_number }}&q={{query}}" class="btn btn-outline-primary">Следующая</a>
+        {% else %}
+            <a href="#" class="btn btn-outline-primary disabled">Следующая</a>
+        {% endif %}
+    </div>
+        </div>
+    {% endif %}
+{% else %}
+    <p>Извините, по вашему запросу ничего не найдено.</p>
+{% endif %}
+
+
     </div>
 </article>
 {% endblock content %}

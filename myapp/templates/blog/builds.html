@@ -3,125 +3,214 @@
 {% load bootstrap_icons %}
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-{% if flag == True %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+<script>
+	$(document).ready(function(){
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: {
+				labels: [{%for data in diagram_data.0 %}'{{data}}',{%endfor%}],
+				datasets: [{
+					label: '# of users',
+					data: [{%for data in diagram_data.1 %}{{data}},{%endfor%}],
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.2)',
+						'rgba(54, 162, 235, 0.2)',
+						'rgba(255, 206, 86, 0.2)',
+						'rgba(75, 192, 192, 0.2)',
+						'rgba(153, 102, 255, 0.2)',
+						'rgba(255, 159, 64, 0.2)',
+						'rgba(250, 235, 215, 0.2 )',
+						'rgba(0, 255, 255, 0.2)',
+						'rgba(0, 0, 255, 0.2 )',
+						'rgba(165, 42, 42, 0.2)',
+						'rgba(127, 255, 0, 0.2)',
+						'rgba(138, 43, 226, 0.2)',
+						'rgba(210, 105, 30, 0.2)',
+						'rgba(220, 20, 60, 0.2)',
+						'rgba(0, 255, 255, 0.2)',
+						'rgba(184, 134, 11, 0.2)',
+						'rgba(0, 100, 0, 0.2)',
+						'rgba(139, 0, 0, 0.2)',
+						'rgba(255, 215, 0, 0.2)',
+						'rgba(0, 128, 0, 0.2 )',
+						'rgba(128, 128, 128, 0.2)',
+						'rgba(255, 105, 180, 0.2 )',
+						'rgba(205, 92, 92, 0.2)',
+						'rgba(124, 252, 0, 0.2)',
+						'rgba(255, 0, 0, 0.2)'
+					],
+					borderColor: [
+						'rgba(255, 99, 132, 1)',
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)',
+						'rgba(250, 235, 215, 1 )',
+						'rgba(0, 255, 255, 1)',
+						'rgba(0, 0, 255, 1 )',
+						'rgba(165, 42, 42, 1)',
+						'rgba(127, 255, 0, 1)',
+						'rgba(138, 43, 226, 1)',
+						'rgba(210, 105, 30, 1)',
+						'rgba(220, 20, 60, 1)',
+						'rgba(0, 255, 255, 1)',
+						'rgba(184, 134, 11, 1)',
+						'rgba(0, 100, 0, 1)',
+						'rgba(139, 0, 0, 1)',
+						'rgba(255, 215, 0, 1)',
+						'rgba(0, 128, 0, 1 )',
+						'rgba(128, 128, 128, 1)',
+						'rgba(255, 105, 180, 1 )',
+						'rgba(205, 92, 92, 1)',
+						'rgba(124, 252, 0, 1)',
+						'rgba(255, 0, 0, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				},
+				legend: {
+					labels: {
+						fontColor: 'black',
+						fontSize: 16
+					}
+				},
+				tooltips: {
+					bodyFontSize: 16,
+					caretSize: 10
+				}
+			}
+		});
+	});
+</script>
+
 <article class="media content-section">
     <div class="media-body">
         <h1 align="center">{{text.name}}</h1><br>
-		<div class="card border-info text-center" style="width: 35rem; margin: auto;" >
+		<div class="card border-info text-center">
 			<div class="card"  >
 				<div class="card-body">
 					<h5 class="card-title" align="center">Информация по муниципалитету</h5>
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Количество учреждений дошкольного образования: {{count_build}}</li>
-						<li class="list-group-item">Количество обучающихся: {{count_students.students__sum}}</li>
-						<li class="list-group-item">Количество работников ОО: {{count_workers.workers__sum}}</li>
+						<li class="list-group-item">Количество учреждений дошкольного образования: {{card_data.0}}</li>
+						<li class="list-group-item">Количество обучающихся ДОО: {{card_data.1}}</li>
+						<li class="list-group-item">Количество работников ДОО: {{card_data.2}}</li>
+						<li class="list-group-item">Расходы ДОО: {{card_data.3}}</li>
+						<li class="list-group-item">Внутренние затраты на внедрение и использование цифровых технологий в ДОО: {{card_data.4}}</li>
 					</ul>
 				</div>
 			</div>
 		</div><br>
+
+		<br><br>
+
+		<form action="{% url 'info' id_info %}" method="get">
+			<div class="input-group">
+				<select class="form-select" name="d" style="text-align: center;" >
+					{% for text_dia in text_for_diagram %}
+						{% if d == text_dia.0 %}
+							<option value="{{text_dia.0}}" selected>{{text_dia.0}}. {{text_dia.1}}</option>
+						{% else %}
+							<option value="{{text_dia.0}}">{{text_dia.0}}. {{text_dia.1}}</option>
+						{% endif %}
+
+					{% endfor %}
+				</select>
+			</div>
+			<div class="input-group-append d-grid gap-2">
+				<button type="submit" class="btn btn-primary ">Применить фильтры</button>
+			</div>
+		</form>
+		<br><br>
+    		<canvas id="myChart" width="400" height="150"></canvas>
+		<br><br>
+
         <form action="{% url 'info' id_info %}" method="get">
             <div class="input-group">
                 <label for="search"></label>
-                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search">
+                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search" value={{query}}>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-secondary"><i> {% bs_icon 'search' %}</i></button>
                 </div>
             </div>
         </form>
-        <br><br>
+
+		<br><br>
+		{% if flag == True %}
             <ul class="list-group">
                 {% for build in builds %}
                     <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }}</a></li>
                 {% endfor %}
             </ul>
+		{% else %}
+        <h3 align="center"> {{builds_title.0}} </h3><br>
+        <ul class="list-group">
+            {% for build in builds_data.0 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
     </div>
 </article>
-{% else %}
 <article class="media content-section">
     <div class="media-body">
-        <h1 align="center">Воронеж</h1><br>
-        <div class="card border-info text-center" style="width: 35rem; margin: auto;">
-			<div class="card"  >
-				<div class="card-body">
-					<h5 class="card-title" align="center">Информация по муниципалитету</h5>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Количество учреждений дошкольного образования: {{count_build}}</li>
-						<li class="list-group-item">Количество обучающихся: {{count_students.students__sum}}</li>
-						<li class="list-group-item">Количество работников ОО: {{count_workers.workers__sum}}</li>
-					</ul>
-				</div>
-			</div>
-		</div><br>
+        <h3 align="center"> {{builds_title.1}} </h3><br>
+        <ul class="list-group">
+            {% for build in builds_data.1 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h3 align="center"> {{builds_title.2}} </h3><br>
+        <ul class="list-group">
+            {% for build in builds_data.2 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h3 align="center"> {{builds_title.3}} </h3><br>
+        <ul class="list-group">
+            {% for build in builds_data.3 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h3 align="center"> {{builds_title.4}} </h3><br>
+        <ul class="list-group">
+            {% for build in builds_data.4 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<article class="media content-section">
+    <div class="media-body">
+        <h3 align="center"> {{builds_title.5}} </h3><br>
+        <ul class="list-group">
+            {% for build in builds_data.5 %}
+                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
+            {% endfor %}
+        </ul>
 
-        <form action="{% url 'info' id_info %}" method="get">
-            <div class="input-group">
-                <label for="search"></label>
-                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-secondary"><i>{% bs_icon 'search' %}</i></button>
-                </div>
-            </div>
-        </form>
-        <br><br>
-
-        <h3 align="center"> {{text8.name}} </h3><br>
-        <ul class="list-group">
-            {% for build in build8 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</article>
-<article class="media content-section">
-    <div class="media-body">
-        <h3 align="center"> {{text9.name}} </h3><br>
-        <ul class="list-group">
-            {% for build in build9 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</article>
-<article class="media content-section">
-    <div class="media-body">
-        <h3 align="center"> {{text10.name}} </h3><br>
-        <ul class="list-group">
-            {% for build in build10 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</article>
-<article class="media content-section">
-    <div class="media-body">
-        <h3 align="center"> {{text11.name}} </h3><br>
-        <ul class="list-group">
-            {% for build in build11 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</article>
-<article class="media content-section">
-    <div class="media-body">
-        <h3 align="center"> {{text12.name}} </h3><br>
-        <ul class="list-group">
-            {% for build in build12 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</article>
-<article class="media content-section">
-    <div class="media-body">
-        <h3 align="center"> {{text13.name}} </h3><br>
-        <ul class="list-group">
-            {% for build in build13 %}
-                <li class="list-group-item list-group-item-light"> <a href="{% url 'buildinfo' build.id %}" class="text-primary">{{build.id}}. {{build.name }} </a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</article>
 {% endif %}
 
+    </div>
+</article>
 {% endblock content %}

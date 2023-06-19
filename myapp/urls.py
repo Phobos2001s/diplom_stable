@@ -11,5 +11,6 @@ urlpatterns = [
     path('lk/redact_data/<int:build_id>/', views.redact_data, name='redact_data'),
     path('userprofile/', views.userprofile, name='userprofile'),
     path('filter/', views.filter, name='filter'),
+    path('diagram/', views.diagram, name='diagram'),
     # path('test/', views.test, name='test'),
 ]

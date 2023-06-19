@@ -1,15 +1,20 @@
 {% extends "blog/baselk.html" %}
 {% load static %}
+{% load bootstrap_icons %}
 {% block content %}
+
 <article class="media content-section">
-    <div class="media-body" style="overflow-x:auto;">
+    <div class="media-body">
+
         <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
 
         {% if flag == 1 %}
 
             <h1 align="center">{{title}}</h1>
             <br><br>
+            <a class="btn btn-primary" href="?{{str}}&VR={{vr}}&v={{v}}&q={{query}}" role="button">Назад</a>
             <a class="btn btn-success" href="{% url 'filter' %}" role="button">Сбросить фильтр</a>
+
 
             {% if id == 0%}
                 <div class="table-responsive">
@@ -1020,60 +1025,106 @@
         {% else %}
             <h1 align="center">Выберете организацию из предложенного списка</h1><br>
 
+
+
             <form action="{% url 'filter' %}" method="get">
                 <div class="checkselect">
                     {% for r in region %}
-                        <label><input type="checkbox" name="regions[]" value="{{ r.id }}">{{r.name}}</label>
+                        {% if r.id in regions  %}
+                            <label><input type="checkbox" name="regions[]" value="{{ r.id }}" checked>{{r.name}}</label>
+                        {% else %}
+                            <label><input type="checkbox" name="regions[]" value="{{ r.id }}">{{r.name}}</label>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <div class="checkselect">
-                    <label><input type="radio" name="VR" value="0" checked>Общие сведения</label>
-                    <label><input type="radio" name="VR" value="1">Раздел 1</label>
-                    <label><input type="radio" name="VR" value="2">Раздел 2</label>
-                    <label><input type="radio" name="VR" value="3">Раздел 3</label>
-                    <label><input type="radio" name="VR" value="4">Раздел 4</label>
-                    <label><input type="radio" name="VR" value="5">Раздел 5</label>
-                    <label><input type="radio" name="VR" value="6">Раздел 6</label>
-                    <label><input type="radio" name="VR" value="7">Раздел 7</label>
-                    <label><input type="radio" name="VR" value="8">Раздел 8</label>
-                    <label><input type="radio" name="VR" value="9">Раздел 9</label>
-                    <label><input type="radio" name="VR" value="10">Раздел 10</label>
-                    <label><input type="radio" name="VR" value="11">Раздел 11</label>
-                    <label><input type="radio" name="VR" value="12">Раздел 12</label>
-                    <label><input type="radio" name="VR" value="13">Раздел 13</label>
-                    <label><input type="radio" name="VR" value="14">Раздел 14</label>
-                    <label><input type="radio" name="VR" value="15">Раздел 15</label>
-                    <label><input type="radio" name="VR" value="16">Раздел 16</label>
-                    <label><input type="radio" name="VR" value="17">Раздел 17</label>
-                    <label><input type="radio" name="VR" value="18">Раздел 18</label>
-                    <label><input type="radio" name="VR" value="19">Раздел 19</label>
-                    <label><input type="radio" name="VR" value="20">Раздел 20</label>
-                    <label><input type="radio" name="VR" value="21">Раздел 21</label>
-                    <label><input type="radio" name="VR" value="22">Раздел 22</label>
-                    <label><input type="radio" name="VR" value="23">Раздел 23</label>
-                    <label><input type="radio" name="VR" value="24">Раздел 24</label>
-                    <label><input type="radio" name="VR" value="25">Раздел 25</label>
+                    {% for d in data_filter %}
+                        {% if d.0 == vr  %}
+                            <label><input type="radio" name="VR" value="{{ d.0 }}" checked>{{d.1}}</label>
+                        {% else %}
+                            <label><input type="radio" name="VR" value="{{ d.0 }}">{{d.1}}</label>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                <br><br>
+                <select class="form-select" name="v" style="text-align: center; max-width: 405px; min-width: 200px;">
+                    {% for vs in v_data %}
+                        {% if vs == v %}
+                            <option value="{{vs}}" selected>Организаций на странице: {{vs}}</option>
+                        {% else %}
+                            <option value="{{vs}}">Организаций на странице: {{vs}}</option>
+                        {% endif %}
+                    {%endfor%}
+                </select>
+
+                <br>
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Применить фильтры</button>
+                    <button type="submit" class="btn btn-primary">Применить фильтр</button>
                 </div>
-                <br><br>
-                {% for build in builds %}
-                    {% for b in build %}
+<br><br>
+<div class="input-group">
+                <label for="search"></label>
+                <input name="q" type="text" placeholder="Поиск..." class="form-control" id="search" value = {{query}}>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary"><i>{% bs_icon 'search' %}</i></button>
+                </div>
+            </div>
+                <br>
 
 
-                        <div class="form-check">
-                            <label class="form-check-label" for="builds"><input type="checkbox" class="form-check-input" name="buildinfo[]" value="{{b.build.id}}" id="builds">{{b.build.id}}. {{b}}</label>
-                        </div>
+                {% if items_page %}
+                    {% for item in items_page %}
+
+                            <div class="form-check">
+                                <label class="form-check-label" for="builds"><input type="checkbox" class="form-check-input" name="buildinfo[]" value="{{item.build.id}}" id="builds">{{item.build.id}}. {{item}}</label>
+                            </div>
+
                     {% endfor %}
 
-                {% endfor %}
             </form>
-            <br><br>
+
+{% if items_page.has_other_pages %}
+
+                        <br><br>
+                        <div class="text-center">
+                            <div class="btn-group text-center" role="group" aria-label="Item pagination" >
+                                {% if items_page.has_previous %}
+                                    <a href="?page={{ items_page.previous_page_number }}&{{str}}VR={{vr}}&v={{v}}&q={{query}}" class="btn btn-outline-primary">Предыдущая</a>
+                                {% else %}
+                                    <a href="#" class="btn btn-outline-primary disabled">Предыдущая</a>
+                                {% endif %}
+
+                                {% for page_number in items_page.paginator.page_range %}
+                                    {% if items_page.number == page_number %}
+                                        <button class="btn btn-outline-primary active">
+                                            <span>{{ page_number }} <span class="sr-only"></span></span>
+                                        </button>
+                                    {% else %}
+                                        <a href="?page={{ page_number }}&{{str}}VR={{vr}}&v={{v}}&q={{query}}" class="btn btn-outline-primary">
+                                            {{ page_number }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if items_page.has_next %}
+                                    <a href="?page={{ items_page.next_page_number }}&{{str}}VR={{vr}}&v={{v}}&q={{query}}" class="btn btn-outline-primary">Следующая</a>
+                                {% else %}
+                                    <a href="#" class="btn btn-outline-primary disabled">Следующая</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p>Извините, по вашему запросу ничего не найдено.</p>
+                {% endif %}
+<br><br>
+
+
+
+            <br>
+
+
+
         {% endif %}
-
-
 
 
 

@@ -2,25 +2,140 @@
 {% load static %}
 {% block content %}
 <article class="media content-section">
-	<div class="media-body" style="height: 58rem;">
+	<div class="media-body" style="height: 93rem;">
 
 		<script type="text/javascript" src="{% static 'js/init.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/raphael.min.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/mapPaths.js' %}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
 
-	<h1 align="center">Интерактивная карта Воронежской области</h1>
-		<div class="card border-info text-center" style="width: 35rem; margin: auto;">
+		<h1 align="center">Интерактивная карта Воронежской области</h1>
+		<div class="card border-info text-center">
 			<div class="card"  >
 				<div class="card-body">
 					<h5 class="card-title" align="center">Информация по Воронежской области</h5>
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Количество учреждений дошкольного образования: {{count_build}}</li>
-						<li class="list-group-item">Количество обучающихся: {{count_students.students__sum}}</li>
-						<li class="list-group-item">Количество работников ОО: {{count_workers.workers__sum}}</li>
+						<li class="list-group-item">Количество учреждений дошкольного образования: {{card_data.0}}</li>
+						<li class="list-group-item">Количество обучающихся ДОО: {{card_data.1}}</li>
+						<li class="list-group-item">Количество работников ДОО: {{card_data.2}}</li>
+						<li class="list-group-item">Расходы ДОО: {{card_data.3}}</li>
+						<li class="list-group-item">Внутренние затраты на внедрение и использование цифровых технологий в ДОО: {{card_data.4}}</li>
 					</ul>
 				</div>
 			</div>
 		</div>
+
+		<script>
+		$(document).ready(function(){
+			var ctx = document.getElementById('myChart').getContext('2d');
+			var myChart = new Chart(ctx, {
+				type: 'doughnut',
+				data: {
+					labels: [{%for data in name %}'{{data}}',{%endfor%}],
+					datasets: [{
+						label: '# of users',
+						data: [{%for data in value%}{{data}},{%endfor%}],
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.2)',
+							'rgba(54, 162, 235, 0.2)',
+							'rgba(255, 206, 86, 0.2)',
+							'rgba(75, 192, 192, 0.2)',
+							'rgba(153, 102, 255, 0.2)',
+							'rgba(255, 159, 64, 0.2)',
+							'rgba(250, 235, 215, 0.2 )',
+							'rgba(0, 255, 255, 0.2)',
+							'rgba(0, 0, 255, 0.2 )',
+							'rgba(165, 42, 42, 0.2)',
+							'rgba(127, 255, 0, 0.2)',
+							'rgba(138, 43, 226, 0.2)',
+							'rgba(210, 105, 30, 0.2)',
+							'rgba(220, 20, 60, 0.2)',
+							'rgba(0, 255, 255, 0.2)',
+							'rgba(184, 134, 11, 0.2)',
+							'rgba(0, 100, 0, 0.2)',
+							'rgba(139, 0, 0, 0.2)',
+							'rgba(255, 215, 0, 0.2)',
+							'rgba(0, 128, 0, 0.2 )',
+							'rgba(128, 128, 128, 0.2)',
+							'rgba(255, 105, 180, 0.2 )',
+							'rgba(205, 92, 92, 0.2)',
+							'rgba(124, 252, 0, 0.2)',
+							'rgba(255, 0, 0, 0.2)'
+						],
+						borderColor: [
+							'rgba(255, 99, 132, 1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)',
+							'rgba(255, 159, 64, 1)',
+							'rgba(250, 235, 215, 1 )',
+							'rgba(0, 255, 255, 1)',
+							'rgba(0, 0, 255, 1 )',
+							'rgba(165, 42, 42, 1)',
+							'rgba(127, 255, 0, 1)',
+							'rgba(138, 43, 226, 1)',
+							'rgba(210, 105, 30, 1)',
+							'rgba(220, 20, 60, 1)',
+							'rgba(0, 255, 255, 1)',
+							'rgba(184, 134, 11, 1)',
+							'rgba(0, 100, 0, 1)',
+							'rgba(139, 0, 0, 1)',
+							'rgba(255, 215, 0, 1)',
+							'rgba(0, 128, 0, 1 )',
+							'rgba(128, 128, 128, 1)',
+							'rgba(255, 105, 180, 1 )',
+							'rgba(205, 92, 92, 1)',
+							'rgba(124, 252, 0, 1)',
+							'rgba(255, 0, 0, 1)'
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					scales: {
+						y: {
+							beginAtZero: true
+						}
+					},
+					legend: {
+						labels: {
+							fontColor: 'black',
+							fontSize: 16
+						}
+					},
+					tooltips: {
+						bodyFontSize: 16,
+						caretSize: 10
+					}
+				}
+			});
+		});
+		</script>
+
+		<br><br>
+
+		<form action="{% url 'blog-home' %}" method="get">
+			<div class="input-group">
+				<select class="form-select" name="q" style="text-align: center;" >
+					{% for text_dia in text_for_diagram %}
+						{% if q == text_dia.0 %}
+							<option value="{{text_dia.0}}" selected>{{text_dia.0}}. {{text_dia.1}}</option>
+						{% else %}
+							<option value="{{text_dia.0}}">{{text_dia.0}}. {{text_dia.1}}</option>
+						{% endif %}
+
+					{% endfor %}
+				</select>
+			</div>
+			<div class="input-group-append d-grid gap-2">
+				<button type="submit" class="btn btn-primary ">Применить фильтры</button>
+			</div>
+		</form>
+		<br><br>
+
+    	<canvas id="myChart" width="400" height="150"></canvas>
 
 		<div id="map">
 			<a class="mapPoint" style="left: 258px; top: 136px"></a>
