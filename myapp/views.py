@@ -1144,7 +1144,6 @@ def filter(request):
     data = []
     namebuilds = []
 
-
     if (not regions) or (regions == ''):
         if (query is None) or (query == ''):
             builds = BuildDocs.objects.select_related('build').all().order_by('build_id')
