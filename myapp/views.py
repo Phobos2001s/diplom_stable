@@ -6,7 +6,7 @@ from django.db import transaction
 from django.views.generic import TemplateView
 
 from .models import Builds, Regions, VR1, VR25, VR24, VR23, VR22, VR21, VR20, VR19, VR18, VR17, VR16, \
-    VR15, VR14, VR13, VR12, VR11, VR10, VR9, VR8, VR7, VR6, VR5, VR4, VR3, VR2
+    VR15, VR14, VR13, VR12, VR11, VR10, VR9, VR8, VR7, VR6, VR5, VR4, VR3, VR2, R1
 import sqlite3
 
 import pandas
@@ -45,29 +45,28 @@ def upload(request, doc_id, path):
     DatabaseController.commit()
 
 
-def load(request, doc_id):
+@login_required
+def postuser(request):
+    doc_id = request.POST.get("doc_id")
+    doc_id = int(doc_id)
+    path = request.POST.get("path")
+    upload(request, doc_id, path)
+    return redirect('lk')
+
+
+@login_required
+def data_doc_search(request, path):
     excel = Excel()
-    wb = excel.load(os.path.join(Path(__file__).resolve().parent.parent, excel.EXCEL_PATH))
+    wb = excel.load(os.path.join(Path(__file__).resolve().parent.parent, path))
+    df_list = excel.read_df1(wb)
     data = {}
-    try:
-        doc = BuildDocs.objects.get(pk=doc_id)
-        for i in range(len(wb.get_sheet_names())):
-            table = wb.get_sheet_names()[i]
-            raw_data = DatabaseController.db_to_df(table, doc.id)
-            df = pandas.DataFrame.from_dict(raw_data)
-            df = df.replace(-1, 'X')
-            df = df.drop(columns=['id', 'doc_id', table[1:].lower() + '_id'])
-            data[i] = {
-                'title': table,
-                'df': df
-            }
-            print(table)
-            excel.df_to_wb(df, wb.get_sheet_by_name(table))
-        excel.save(wb, str(doc.id))
-    except Exception as e:
-        print("Error during select: ", e)
-    context = {'data': data}
-    return render(request, 'test/excel_view.html', context)
+    for i in range(len(df_list)):
+        table = wb.get_sheet_names()[i]
+        data[i] = {
+            'title': table,
+            'df': df_list[i]
+        }
+    return data
 
 
 def text_diagram():
@@ -792,15 +791,15 @@ def home(request):
 
 
 def about(request):
-    # builds = Builds.objects.filter(id_reg=1)
-    #
+    builds = Builds.objects.filter(id_reg=2)
+
     # for build in builds:
     #     print(build)
     #     buildoc = BuildDocs()
     #     buildoc.build = build
     #     buildoc.user = request.user
     #     buildoc.save()
-    return render(request, 'blog/about.html', {'title': 'Добавить информацию'})
+    return render(request, 'blog/about.html', {'title': 'О ресурсе'})
 
 
 def info(request, id):
@@ -1021,7 +1020,7 @@ def vr(request, id_build, id):
         VR = VR25.objects.select_related('r25').filter(doc=doc).order_by('r25_id')
 
     if not VR:
-        warning = "Организация не предоставила таких данных"
+        warning = "Ошибка доступа: нет такой информации"
     context = {'title': title, 'VR': VR, 'flag': id, 'id_build': id_build, 'warning': warning}
     return render(request, 'blog/VR.html', context)
 
@@ -1095,9 +1094,17 @@ def redact_data(request, build_id):
             build = Builds.objects.get(pk=build_id)
             doc = BuildDocs.objects.get(build=build_id)
             path = str(build.link)
-            upload(request, doc.id, path)
+            data = data_doc_search(request, path)
+            r1 = R1.objects.all()
+            return render(request, 'blog/dop_red.html', {
+                "data": data,
+                'doc_id': doc.id,
+                'path': path
+            })
 
-            return render(request, 'blog/lk.html', context)
+            # upload(request, doc.id, path)
+
+            # return render(request, 'blog/lk.html', context)
     else:
         form = forms.BuildsForm(instance=Builds.objects.get(id=build_id))
     return render(request, 'blog/redact_data.html', {
@@ -1611,3 +1618,28 @@ def diagram(request):
 #         buildoc.user = request.user
 #         buildoc.save()
 #     return render(request, 'blog/home.html')
+
+
+# def load(request, doc_id):
+#     excel = Excel()
+#     wb = excel.load(os.path.join(Path(__file__).resolve().parent.parent, excel.EXCEL_PATH))
+#     data = {}
+#     try:
+#         doc = BuildDocs.objects.get(pk=doc_id)
+#         for i in range(len(wb.get_sheet_names())):
+#             table = wb.get_sheet_names()[i]
+#             raw_data = DatabaseController.db_to_df(table, doc.id)
+#             df = pandas.DataFrame.from_dict(raw_data)
+#             df = df.replace(-1, 'X')
+#             df = df.drop(columns=['id', 'doc_id', table[1:].lower() + '_id'])
+#             data[i] = {
+#                 'title': table,
+#                 'df': df
+#             }
+#             print(table)
+#             excel.df_to_wb(df, wb.get_sheet_by_name(table))
+#         excel.save(wb, str(doc.id))
+#     except Exception as e:
+#         print("Error during select: ", e)
+#     context = {'data': data}
+#     return render(request, 'test/excel_view.html', context)

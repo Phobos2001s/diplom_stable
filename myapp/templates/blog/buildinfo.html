@@ -43,13 +43,24 @@
             </ul>
         <div>
             <br>
-            <h3 align="center">Дополнительные сведения</h3><br><br>
 
+            <h3 align="center">Дополнительные сведения</h3><br><br>
             <p>Для более полного исследования условий, которые способна предоставить образовательная организация, можно обратиться к форме N 85-k (Сведения о деятельности организации, осуществляющей образовательную деятельность по образовательным программам дошкольного образования, присмотр и уход за детьми)</p>
+
+
+            {% if build.link == 'docs/default/template.xlsx'%}
+            <a class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Организация пока не подала данные</a> <br><br>
+
+            <p>Однако, вы можете также спокойно скачать данный документ с данного ресурса</p>
+             <a class="btn btn-primary  btn-lg disabled" role="button" aria-disabled="true">Скачать документ</a>
+
+            {% else %}
+
             <a href="{% url 'VR' build.id 1 %}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Изучить форму для данной организации</a><br><br>
+
             <p>Однако, вы можете также спокойно скачать данный документ с данного ресурса</p>
             <a href="{{ build.link.url  }}" class="btn btn-primary btn-lg" role="button" aria-disabled="false">Скачать документ</a>
-
+            {% endif %}
         </div>
     </div>
 </article>

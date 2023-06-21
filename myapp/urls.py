@@ -12,5 +12,7 @@ urlpatterns = [
     path('userprofile/', views.userprofile, name='userprofile'),
     path('filter/', views.filter, name='filter'),
     path('diagram/', views.diagram, name='diagram'),
-    # path('test/', views.test, name='test'),
+    path('lk/redact_data/dop_red', views.redact_data, name='redact_data'),
+    path("postuser/", views.postuser, name='postuser'),
+    # path('test/', views.test, name='test'), dop_red
 ]

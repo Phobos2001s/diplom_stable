@@ -1,0 +1,99 @@
+{% extends "blog/baselk.html" %}
+{% load static %}
+{% load bootstrap5 %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body" style="overflow-x:auto;">
+        <h1 align="center" >Редактирование данных об организации по форме N 85-К</h1>
+        <br>
+
+        <form method="post" action="{%url 'postuser'%}">
+            {% csrf_token %}
+            <input type="hidden" name="doc_id" value="{{doc_id}}">
+            <input type="hidden" name="path" value="{{path}}">
+            <button type="submit" class="btn btn-primary">Сохранить данные по форме N 85-K</button>
+        </form>
+
+        {% for key, value in data.items %}
+            <div class="table-responsive">
+                {% if value.title == "VR1" %}
+                    <h2 class="text-center">Раздел 1</h2>
+                {% elif value.title == "VR2" %}
+                    <h2 class="text-center">Раздел 2</h2>
+                {% elif value.title == "VR3" %}
+                    <h2 class="text-center">Раздел 3</h2>
+                {% elif value.title == "VR4" %}
+                    <h2 class="text-center">Раздел 4</h2>
+                {% elif value.title == "VR5" %}
+                    <h2 class="text-center">Раздел 5</h2>
+                {% elif value.title == "VR6" %}
+                    <h2 class="text-center">Раздел 6</h2>
+                {% elif value.title == "VR7" %}
+                    <h2 class="text-center">Раздел 7</h2>
+                {% elif value.title == "VR8" %}
+                    <h2 class="text-center">Раздел 8</h2>
+                {% elif value.title == "VR9" %}
+                    <h2 class="text-center">Раздел 9</h2>
+                {% elif value.title == "VR10" %}
+                    <h2 class="text-center">Раздел 10</h2>
+                {% elif value.title == "VR11" %}
+                    <h2 class="text-center">Раздел 11</h2>
+                {% elif value.title == "VR12" %}
+                    <h2 class="text-center">Раздел 12</h2>
+                {% elif value.title == "VR13" %}
+                    <h2 class="text-center">Раздел 13</h2>
+                {% elif value.title == "VR14" %}
+                    <h2 class="text-center">Раздел 14</h2>
+                {% elif value.title == "VR15" %}
+                    <h2 class="text-center">Раздел 15</h2>
+                {% elif value.title == "VR16" %}
+                    <h2 class="text-center">Раздел 16</h2>
+                {% elif value.title == "VR17" %}
+                    <h2 class="text-center">Раздел 17</h2>
+                {% elif value.title == "VR18" %}
+                    <h2 class="text-center">Раздел 18</h2>
+                {% elif value.title == "VR19" %}
+                    <h2 class="text-center">Раздел 19</h2>
+                {% elif value.title == "VR20" %}
+                    <h2 class="text-center">Раздел 20</h2>
+                {% elif value.title == "VR21" %}
+                    <h2 class="text-center">Раздел 21</h2>
+                {% elif value.title == "VR22" %}
+                    <h2 class="text-center">Раздел 22</h2>
+                {% elif value.title == "VR23" %}
+                    <h2 class="text-center">Раздел 23</h2>
+                {% elif value.title == "VR24" %}
+                    <h2 class="text-center">Раздел 24</h2>
+                {% else %}
+                    <h2 class="text-center">Раздел 25</h2>
+                {% endif %}
+
+
+
+
+
+
+
+
+                <br>
+                <table class="table table-striped table-bordered">
+                    {% for index, row in value.df.iterrows %}
+                        <tr>
+
+                            {% for cell in row %}
+                                {%if index == 0%}
+
+                                    <th scope="col">{{cell}}</th>
+                                {%else %}
+                                    <td>{{cell}}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        {% endfor %}
+    </div>
+</article>
+{% endblock content %}

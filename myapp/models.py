@@ -18,8 +18,8 @@ class Regions(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Регионы и области'
-        verbose_name = 'Регионы и области'
+        verbose_name_plural = 'Районы Воронежской области'
+        verbose_name = 'район'
 
 
 class Builds(models.Model):
@@ -39,8 +39,8 @@ class Builds(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Организации'
-        verbose_name = 'Организация'
+        verbose_name_plural = 'Организации Воронежской области'
+        verbose_name = 'Организацию'
 
 
 class BuildDocs(models.Model):
@@ -52,8 +52,8 @@ class BuildDocs(models.Model):
         return self.build.name
 
     class Meta:
-        verbose_name_plural = 'Добавить документ'
-        verbose_name = 'Добавить документ'
+        verbose_name_plural = 'Права доступа пользователей к организациям'
+        verbose_name = 'право доступа'
 
 
 class R1(models.Model):
@@ -288,7 +288,7 @@ class R25(models.Model):
 
 
 class VR1(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r1 = models.ForeignKey(R1, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value = models.IntegerField(verbose_name='код')
 
@@ -298,7 +298,7 @@ class VR1(models.Model):
 
 
 class VR2(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r2 = models.ForeignKey(R2, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value = models.IntegerField(verbose_name='Численность воспитанников, чел.')
 
@@ -308,7 +308,7 @@ class VR2(models.Model):
 
 
 class VR3(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r3 = models.ForeignKey(R3, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего реализуемых образовательных программ')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='Число образовательных программ реализуемых с использованием сетевой формы')
@@ -321,7 +321,7 @@ class VR3(models.Model):
 
 
 class VR4(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r4 = models.ForeignKey(R4_R5_R6, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего групп')
     value2 = models.IntegerField(verbose_name='от 2-х месяцев до 1 года')
@@ -336,7 +336,7 @@ class VR4(models.Model):
 
 
 class VR5(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r5 = models.ForeignKey(R4_R5_R6, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего групп')
     value2 = models.IntegerField(verbose_name='от 2-х месяцев до 1 года')
@@ -351,7 +351,7 @@ class VR5(models.Model):
 
 
 class VR6(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r6 = models.ForeignKey(R4_R5_R6, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего групп')
     value2 = models.IntegerField(verbose_name='от 2-х месяцев до 1 года')
@@ -371,7 +371,7 @@ class VR6(models.Model):
 
 
 class VR7(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r7 = models.ForeignKey(R7, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего')
     value2 = models.IntegerField(verbose_name='0 лет')
@@ -389,7 +389,7 @@ class VR7(models.Model):
 
 
 class VR8(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r8 = models.ForeignKey(R8, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Численность воспитанников')
 
@@ -399,7 +399,7 @@ class VR8(models.Model):
 
 
 class VR9(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r9 = models.ForeignKey(R9, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='Высшее образование')
@@ -414,7 +414,7 @@ class VR9(models.Model):
 
 
 class VR10(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r10 = models.ForeignKey(R10_R11_R13, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего')
     value2 = models.IntegerField(verbose_name='моложе 25 лет')
@@ -434,7 +434,7 @@ class VR10(models.Model):
 
 
 class VR11(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r11 = models.ForeignKey(R10_R11_R13, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего с общим стажем')
     value2 = models.IntegerField(verbose_name='с общим стажем до 3 лет')
@@ -457,7 +457,7 @@ class VR11(models.Model):
 
 
 class VR12(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r12 = models.ForeignKey(R12, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Всего')
     value2 = models.IntegerField(verbose_name='Всего женщин')
@@ -468,7 +468,7 @@ class VR12(models.Model):
 
 
 class VR13(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r13 = models.ForeignKey(R10_R11_R13, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(verbose_name='Число ставок по штату, ед.')
     value2 = models.IntegerField(verbose_name='Всего фактически занято')
@@ -488,7 +488,7 @@ class VR13(models.Model):
 
 
 class VR14(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r14 = models.ForeignKey(R14, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='Оборудовано водопроводом')
@@ -518,7 +518,7 @@ class VR14(models.Model):
 
 
 class VR15(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r15 = models.ForeignKey(R15, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Стены здания: каменные')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='Стены здания: кирпичные')
@@ -535,7 +535,7 @@ class VR15(models.Model):
 
 
 class VR16(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r16 = models.ForeignKey(R16, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Наличие в организации, код: да - 1, нет - 2')
 
@@ -545,7 +545,7 @@ class VR16(models.Model):
 
 
 class VR17(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r17 = models.ForeignKey(R17, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='Площадь, сданная в аренду и/или субаренду')
@@ -560,7 +560,7 @@ class VR17(models.Model):
 
 
 class VR18(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r18 = models.ForeignKey(R18, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Наличие в организации, код: да - 1, нет - 2')
 
@@ -570,7 +570,7 @@ class VR18(models.Model):
 
 
 class VR19(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r19 = models.ForeignKey(R19, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Наличие в организации, код: да - 1, нет - 2')
 
@@ -580,7 +580,7 @@ class VR19(models.Model):
 
 
 class VR20(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r20 = models.ForeignKey(R20, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='в том числе доступные для использования воспитанниками')
@@ -591,7 +591,7 @@ class VR20(models.Model):
 
 
 class VR21(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r21 = models.ForeignKey(R21, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='из них по образовательной деятельности')
@@ -602,7 +602,7 @@ class VR21(models.Model):
 
 
 class VR22(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r22 = models.ForeignKey(R22, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='из них осуществляемые за счет средств бюджетов всех уровней (субсидий)')
@@ -613,7 +613,7 @@ class VR22(models.Model):
 
 
 class VR23(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r23 = models.ForeignKey(R23, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Средняя численность работников списочного состава (без внешних совместителей)')
     value2 = models.IntegerField(null=True, blank=True, verbose_name='Средняя численность работников внешних совместителей')
@@ -633,7 +633,7 @@ class VR23(models.Model):
 
 
 class VR24(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r24 = models.ForeignKey(R24, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
 
@@ -643,7 +643,7 @@ class VR24(models.Model):
 
 
 class VR25(models.Model):
-    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Документ')
+    doc = models.ForeignKey(BuildDocs, on_delete=models.CASCADE, verbose_name='Организация')
     r25 = models.ForeignKey(R25, on_delete=models.CASCADE, verbose_name='Наименование показателей')
     value1 = models.IntegerField(null=True, blank=True, verbose_name='Всего')
 

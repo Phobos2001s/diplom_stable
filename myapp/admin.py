@@ -3,7 +3,10 @@ from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
+
 from .import models
+
+admin.site.site_header = 'Административая часть системы'
 
 
 class RegionResource(resources.ModelResource):
@@ -214,9 +217,13 @@ class R25Admin(ImportExportModelAdmin):
     resource_classes = [R25Resource]
 
 
+class BuildDocsAdmin(ImportExportModelAdmin):
+    list_display = ('user', 'build')
+
+
 admin.site.register(models.Regions, RegionAdmin)
 admin.site.register(models.Builds, BuildsAdmin)
-admin.site.register(models.BuildDocs)
+admin.site.register(models.BuildDocs, BuildDocsAdmin)
 
 admin.site.register(models.R1, R1Admin)
 admin.site.register(models.R2, R2Admin)

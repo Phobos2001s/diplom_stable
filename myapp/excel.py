@@ -42,6 +42,19 @@ class Excel:
         ##print(data_frame)
         return data_frame
 
+
+    def read_df1(self, wb):
+        # Get sheet names
+        ##print(wb.get_sheet_names())
+        data_frame = []
+        for sheet_name in wb.get_sheet_names():
+            sheet = wb.get_sheet_by_name(sheet_name)
+            print(sheet.title)
+            data_frame.append(self.ws_to_df1(sheet))
+
+        ##print(data_frame)
+        return data_frame
+
     # весь лист в датафрейм
     def ws_to_df(self, sheet):
         # Convert Sheet to DataFrame
@@ -49,6 +62,22 @@ class Excel:
 
         # Put the sheet values in `data`
         data = [[sheet.cell(r, c).value for c in range(self.START_COL, sheet.max_column + 1)] for r in
+                range(self.START_ROW, sheet.max_row + 1)]
+
+        # Convert your data to a list
+        data = list(data)
+
+        # Make your DataFrame
+        df = pd.DataFrame(data)
+        df.fillna(0, inplace=True)
+        return df
+
+    def ws_to_df1(self, sheet):
+        # Convert Sheet to DataFrame
+        # df = pd.DataFrame(sheet.values)
+
+        # Put the sheet values in `data`
+        data = [[sheet.cell(r, c).value for c in range(1, sheet.max_column + 1)] for r in
                 range(self.START_ROW, sheet.max_row + 1)]
 
         # Convert your data to a list
