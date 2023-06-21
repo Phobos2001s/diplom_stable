@@ -1147,40 +1147,22 @@ def filter(request):
 
     if (not regions) or (regions == ''):
         if (query is None) or (query == ''):
-            try:
-                builds.union(BuildDocs.objects.select_related('build').all().order_by('build_id'))
-            except NameError:
-                builds = BuildDocs.objects.select_related('build').all().order_by('build_id')
+            builds = BuildDocs.objects.select_related('build').all().order_by('build_id')
         else:
-            try:
-                builds.union(BuildDocs.objects.select_related('build').filter(
-                    Q(build__id__icontains=query) | Q(build__name__icontains=query)
-                ).order_by('build_id'))
-            except NameError:
-                builds = BuildDocs.objects.select_related('build').filter(
-                    Q(build__id__icontains=query) | Q(build__name__icontains=query)
-                ).order_by('build_id')
+            builds = BuildDocs.objects.select_related('build').filter(
+                Q(build__id__icontains=query) | Q(build__name__icontains=query)
+            ).order_by('build_id')
     else:
         if (query is None) or (query == ''):
-            for region in regions:
-                r = int(region)
-                try:
-                    builds.union(BuildDocs.objects.select_related('build').filter(build__id_reg=r).order_by('build_id'))
-                except NameError:
-                    builds = BuildDocs.objects.select_related('build').filter(build__id_reg=r).order_by('build_id')
+
+            builds = BuildDocs.objects.select_related('build').filter(build__id_reg__in = regions).order_by('build_id')
+
         else:
             for region in regions:
-                r = int(region)
-                try:
-                    builds.union(BuildDocs.objects.select_related('build').filter(
-                        Q(build__id_reg=r) &
-                        (Q(build__id__icontains=query) | Q(build__name__icontains=query))
-                    ).order_by('build_id'))
-                except NameError:
-                    builds = BuildDocs.objects.select_related('build').filter(
-                        Q(build__id_reg=r) &
-                        (Q(build__id__icontains=query) | Q(build__name__icontains=query))
-                    ).order_by('build_id')
+                builds = BuildDocs.objects.select_related('build').filter(
+                    Q(build__id_reg__in = regions) &
+                    (Q(build__id__icontains=query) | Q(build__name__icontains=query))
+                ).order_by('build_id')
 
     if not buildinfo:
         flag = 0
